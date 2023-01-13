@@ -1,4 +1,4 @@
-# Zod Utils
+# Zod Utilz
 Framework agnostic utilities for Zod
 
 ## Table of contents
