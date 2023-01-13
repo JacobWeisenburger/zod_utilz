@@ -5,17 +5,18 @@ await emptyDir( './npm' )
 
 await build( {
     entryPoints: [ './src/mod.ts' ],
+    importMap: './import_map.json',
     outDir: './npm',
     shims: { deno: true },
     package: {
-        name: 'zod-utils',
-        version: '0.0.1',
+        name: 'zod_utilz',
+        version: '0.1.0',
         author: 'JacobWeisenburger',
         description: 'Framework agnostic utilities for Zod',
         license: 'MIT',
-        // npm: 'https://www.npmjs.com/package/zod-utilz',
-        repository: 'https://github.com/JacobWeisenburger/zod-utilz',
-        homepage: 'https://github.com/JacobWeisenburger/zod-utilz',
+        // npm: 'https://www.npmjs.com/package/zod_utilz',
+        repository: 'https://github.com/JacobWeisenburger/zod_utilz',
+        homepage: 'https://github.com/JacobWeisenburger/zod_utilz',
     },
 } )
 
