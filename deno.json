@@ -1,0 +1,10 @@
+{
+    "tasks": {
+        "start": "cmd.exe /c start bash -c 'deno run -A --watch index.ts'"
+    },
+    "importMap": "./import_map.json",
+    "compilerOptions": {
+        "noImplicitAny": false,
+        "suppressImplicitAnyIndexErrors": true
+    }
+}
