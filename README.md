@@ -15,23 +15,23 @@ Framework agnostic utilities for Zod
 
 ### From npm (Node/Bun)
 ```ts
-npm install zod-utilz zod       # npm
-yarn add zod-utilz zod          # yarn
-bun add zod-utilz zod           # bun
-pnpm add zod-utilz zod          # pnpm
+npm install zod_utilz zod       # npm
+yarn add zod_utilz zod          # yarn
+bun add zod_utilz zod           # bun
+pnpm add zod_utilz zod          # pnpm
 ```
 
 ## Getting Started
 
 ### import
 ```ts
-import {} from 'npm:zod-utilz'  # Deno
-import {} from 'zod-utilz'      # Node/Bun
+import {} from 'npm:zod_utilz'  # Deno
+import {} from 'zod_utilz'      # Node/Bun
 ```
 
 ### getErrorMessage
 ```ts
-import { getErrorMessage } from 'zod-utilz'
+import { getErrorMessage } from 'zod_utilz'
 const schema = z.string()
 zUtilz.getErrorMessage( schema.safeParse( undefined ) )
 // Required
@@ -39,7 +39,7 @@ zUtilz.getErrorMessage( schema.safeParse( undefined ) )
 
 ### makeErrorMap
 ```ts
-import { makeErrorMap, getErrorMessage } from 'zod-utilz'
+import { makeErrorMap, getErrorMessage } from 'zod_utilz'
 
 const { errorMap } = zUtilz.makeErrorMap( {
     required: 'Custom required message',
