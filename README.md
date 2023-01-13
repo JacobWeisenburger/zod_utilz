@@ -1,7 +1,15 @@
 # Zod Utils
 Framework agnostic utilities for Zod
 
-<!-- ## Table of contents -->
+## Table of contents
+- [Installation](#installation)
+- [Getting Started](#getting-started)
+  - [import](#import)
+  - [getErrorMessage](#geterrormessage)
+  - [makeErrorMap](#makeerrormap)
+  <!-- - [URLSearchParams](#urlsearchparams) -->
+  <!-- - [FormData](#formdata) -->
+  <!-- - [Partial Safe Parse](#partial-safe-parse) -->
 
 ## Installation
 
