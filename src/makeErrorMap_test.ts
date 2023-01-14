@@ -1,8 +1,8 @@
 import { z } from 'zod'
+import { zu } from '../mod.ts'
 import { assertEquals } from 'std/testing/asserts.ts'
-import { zUtilz } from './mod.ts'
 
-const { errorMap, config } = zUtilz.makeErrorMap( {
+const { errorMap, config } = zu.makeErrorMap( {
     required: 'required',
     invalid_type: 'invalid_type',
     too_small: () => 'too_small',
@@ -17,27 +17,27 @@ Deno.test( 'z.string( { errorMap } )', () => {
     const schema = z.string( { errorMap } ).min( 3 ).max( 5 )
 
     assertEquals(
-        zUtilz.safeParseResult( schema.safeParse( 'foo' ) ).data,
+        zu.SPR( schema.safeParse( 'foo' ) ).data,
         'foo'
     )
     assertEquals(
-        zUtilz.getErrorMessage( schema.safeParse( undefined ) ),
+        zu.SPR( schema.safeParse( undefined ) ).error?.issues[ 0 ].message,
         config.required,
     )
     assertEquals(
-        zUtilz.getErrorMessage( schema.safeParse( 42 ) ),
+        zu.SPR( schema.safeParse( 42 ) ).error?.issues[ 0 ].message,
         config.invalid_type,
     )
     assertEquals(
-        zUtilz.getErrorMessage( schema.safeParse( [ 'foo' ] ) ),
+        zu.SPR( schema.safeParse( [ 'foo' ] ) ).error?.issues[ 0 ].message,
         config.invalid_type,
     )
     assertEquals(
-        zUtilz.getErrorMessage( schema.safeParse( 'ha' ) ),
+        zu.SPR( schema.safeParse( 'ha' ) ).error?.issues[ 0 ].message,
         config.too_small(),
     )
     assertEquals(
-        zUtilz.getErrorMessage( schema.safeParse( 'hello world' ) ),
+        zu.SPR( schema.safeParse( 'hello world' ) ).error?.issues[ 0 ].message,
         config.too_big(),
     )
 } )
@@ -46,27 +46,27 @@ Deno.test( 'z.number( { errorMap } )', () => {
     const schema = z.number( { errorMap } ).min( 3 ).max( 5 )
 
     assertEquals(
-        zUtilz.safeParseResult( schema.safeParse( 3 ) ).data,
+        zu.SPR( schema.safeParse( 3 ) ).data,
         3
     )
     assertEquals(
-        zUtilz.getErrorMessage( schema.safeParse( undefined ) ),
+        zu.SPR( schema.safeParse( undefined ) ).error?.issues[ 0 ].message,
         config.required,
     )
     assertEquals(
-        zUtilz.getErrorMessage( schema.safeParse( 'foo' ) ),
+        zu.SPR( schema.safeParse( 'foo' ) ).error?.issues[ 0 ].message,
         config.invalid_type,
     )
     assertEquals(
-        zUtilz.getErrorMessage( schema.safeParse( [ 42 ] ) ),
+        zu.SPR( schema.safeParse( [ 42 ] ) ).error?.issues[ 0 ].message,
         config.invalid_type,
     )
     assertEquals(
-        zUtilz.getErrorMessage( schema.safeParse( 2 ) ),
+        zu.SPR( schema.safeParse( 2 ) ).error?.issues[ 0 ].message,
         config.too_small(),
     )
     assertEquals(
-        zUtilz.getErrorMessage( schema.safeParse( 6 ) ),
+        zu.SPR( schema.safeParse( 6 ) ).error?.issues[ 0 ].message,
         config.too_big(),
     )
 } )
@@ -75,19 +75,19 @@ Deno.test( `z.enum( [ 'foo', 'bar', 'baz' ], { errorMap } )`, () => {
     const schema = z.enum( [ 'foo', 'bar', 'baz' ], { errorMap } )
 
     assertEquals(
-        zUtilz.safeParseResult( schema.safeParse( 'foo' ) ).data,
+        zu.SPR( schema.safeParse( 'foo' ) ).data,
         'foo'
     )
     assertEquals(
-        zUtilz.getErrorMessage( schema.safeParse( undefined ) ),
+        zu.SPR( schema.safeParse( undefined ) ).error?.issues[ 0 ].message,
         config.required,
     )
     assertEquals(
-        zUtilz.getErrorMessage( schema.safeParse( 42 ) ),
+        zu.SPR( schema.safeParse( 42 ) ).error?.issues[ 0 ].message,
         config.invalid_type,
     )
     assertEquals(
-        zUtilz.getErrorMessage( schema.safeParse( [ 'foo' ] ) ),
+        zu.SPR( schema.safeParse( [ 'foo' ] ) ).error?.issues[ 0 ].message,
         config.invalid_type,
     )
 } )
@@ -97,19 +97,19 @@ Deno.test( 'z.date( { errorMap } )', () => {
 
     const now = new Date
     assertEquals(
-        zUtilz.safeParseResult( schema.safeParse( now ) ).data,
+        zu.SPR( schema.safeParse( now ) ).data,
         now
     )
     assertEquals(
-        zUtilz.getErrorMessage( schema.safeParse( undefined ) ),
+        zu.SPR( schema.safeParse( undefined ) ).error?.issues[ 0 ].message,
         config.required,
     )
     assertEquals(
-        zUtilz.getErrorMessage( schema.safeParse( '2023-01-13' ) ),
+        zu.SPR( schema.safeParse( '2023-01-13' ) ).error?.issues[ 0 ].message,
         config.invalid_type,
     )
     assertEquals(
-        zUtilz.getErrorMessage( schema.safeParse( null ) ),
+        zu.SPR( schema.safeParse( null ) ).error?.issues[ 0 ].message,
         config.invalid_type,
     )
 } )

@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { zUtilz } from './src/mod.ts'
+import { zu } from './mod.ts'
 import { assertEquals } from 'std/testing/asserts.ts'
 import { ErrorMapMessageBuilderContext } from './src/makeErrorMap.ts'
 
@@ -7,7 +7,7 @@ Deno.test( 'getErrorMessage', () => {
     const schema = z.string()
 
     assertEquals(
-        zUtilz.getErrorMessage( schema.safeParse( undefined ) ),
+        zu.getErrorMessage( schema.safeParse( undefined ) ),
         'Required'
     )
 } )
@@ -24,7 +24,7 @@ const errorCtxMock = {
 } satisfies ErrorMapMessageBuilderContext
 
 Deno.test( 'makeErrorMap', () => {
-    const { errorMap, config } = zUtilz.makeErrorMap( {
+    const { errorMap, config } = zu.makeErrorMap( {
         required: 'Custom required message',
         invalid_type: ( { data } ) => `${ data } is an invalid type`,
         invalid_enum_value: ( { data, options } ) =>
@@ -34,11 +34,11 @@ Deno.test( 'makeErrorMap', () => {
     const stringSchema = z.string( { errorMap } )
 
     assertEquals(
-        zUtilz.getErrorMessage( stringSchema.safeParse( undefined ) ),
+        zu.getErrorMessage( stringSchema.safeParse( undefined ) ),
         config.required,
     )
     assertEquals(
-        zUtilz.getErrorMessage( stringSchema.safeParse( 42 ) ),
+        zu.getErrorMessage( stringSchema.safeParse( 42 ) ),
         config.invalid_type( {
             ...errorCtxMock,
             data: 42
@@ -48,7 +48,7 @@ Deno.test( 'makeErrorMap', () => {
     const enumSchema = z.enum( [ 'foo', 'bar' ], { errorMap } )
 
     assertEquals(
-        zUtilz.getErrorMessage( enumSchema.safeParse( 'baz' ) ),
+        zu.getErrorMessage( enumSchema.safeParse( 'baz' ) ),
         config.invalid_enum_value( {
             ...errorCtxMock,
             data: 'baz',

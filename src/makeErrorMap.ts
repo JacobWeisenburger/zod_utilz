@@ -16,6 +16,31 @@ export type ErrorMapConfig = Partial<Record<ErrorCode, ErrorMapMessage | ErrorMa
 
 // https://gist.github.com/JacobWeisenburger/36cc8fae5c40fca692cb59a60f3afa33
 
+/**
+Simplifies the process of making a `ZodErrorMap`
+
+### Usage:
+```
+import { zu } from 'zod_utilz'
+
+const { errorMap } = zu.makeErrorMap( {
+    required: 'Custom required message',
+    invalid_type: ( { data } ) => `${ data } is an invalid type`,
+    invalid_enum_value: ( { data, options } ) =>
+        `${ data } is not a valid enum value. Valid options: ${ options?.join( ' | ' ) } `,
+} )
+
+const stringSchema = z.string( { errorMap } )
+zu.getErrorMessage( stringSchema.safeParse( undefined ) )
+// Custom required message
+zu.getErrorMessage( stringSchema.safeParse( 42 ) )
+// 42 is an invalid type
+
+const enumSchema = z.enum( [ 'foo', 'bar' ], { errorMap } )
+zu.getErrorMessage( enumSchema.safeParse( 'baz' ) )
+// baz is not a valid enum value. Valid options: foo | bar
+ ```
+*/
 export function makeErrorMap<Config extends ErrorMapConfig> ( config: Config ): {
     config: Config,
     errorMap: z.ZodErrorMap,
