@@ -70,13 +70,13 @@ const { errorMap } = zu.makeErrorMap( {
 } )
 
 const stringSchema = z.string( { errorMap } )
-zu.getErrorMessage( stringSchema.safeParse( undefined ) )
+zu.SPR( stringSchema.safeParse( undefined ) ).error?.issues[ 0 ].message,
 // Custom required message
-zu.getErrorMessage( stringSchema.safeParse( 42 ) )
+zu.SPR( stringSchema.safeParse( 42 ) ).error?.issues[ 0 ].message,
 // 42 is an invalid type
 
 const enumSchema = z.enum( [ 'foo', 'bar' ], { errorMap } )
-zu.getErrorMessage( enumSchema.safeParse( 'baz' ) )
+zu.SPR( enumSchema.safeParse( 'baz' ) ).error?.issues[ 0 ].message,
 // baz is not a valid enum value. Valid options: foo | bar
 ```
 
