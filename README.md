@@ -66,3 +66,8 @@ zUtilz.getErrorMessage( enumSchema.safeParse( 'baz' ) )
 
 <!-- ### Partial Safe Parse -->
 <!-- https://gist.github.com/JacobWeisenburger/d5dbb4d5bcbb287b7661061a78536423 -->
+
+## TODO
+- URLSearchParams
+- FormData
+- Partial Safe Parse
