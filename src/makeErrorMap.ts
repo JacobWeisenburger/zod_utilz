@@ -2,10 +2,10 @@ import { z } from 'zod'
 
 export type ErrorCode = z.ZodIssueCode | 'required'
 
-export type ErrorMapMessageBuilderContext = Partial<z.ErrorMapCtx & {
+export type ErrorMapMessageBuilderContext = z.ErrorMapCtx & {
     issue: z.ZodIssueOptionalMessage,
-    options: any[] | readonly any[],
-}>
+    options?: any[] | readonly any[],
+}
 
 export type ErrorMapMessage = string
 

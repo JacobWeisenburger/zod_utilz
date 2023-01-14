@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { zUtilz } from './src/mod.ts'
 import { assertEquals } from 'std/testing/asserts.ts'
+import { ErrorMapMessageBuilderContext } from './src/makeErrorMap.ts'
 
 Deno.test( 'getErrorMessage', () => {
     const schema = z.string()
@@ -10,6 +11,17 @@ Deno.test( 'getErrorMessage', () => {
         'Required'
     )
 } )
+
+const errorCtxMock = {
+    data: 'unknown',
+    defaultError: 'Invalid',
+    issue: {
+        code: 'invalid_type',
+        expected: 'unknown',
+        received: 'unknown',
+        path: [],
+    }
+} satisfies ErrorMapMessageBuilderContext
 
 Deno.test( 'makeErrorMap', () => {
     const { errorMap, config } = zUtilz.makeErrorMap( {
@@ -27,13 +39,20 @@ Deno.test( 'makeErrorMap', () => {
     )
     assertEquals(
         zUtilz.getErrorMessage( stringSchema.safeParse( 42 ) ),
-        config.invalid_type( { data: 42 } ),
+        config.invalid_type( {
+            ...errorCtxMock,
+            data: 42
+        } ),
     )
 
     const enumSchema = z.enum( [ 'foo', 'bar' ], { errorMap } )
 
     assertEquals(
         zUtilz.getErrorMessage( enumSchema.safeParse( 'baz' ) ),
-        config.invalid_enum_value( { data: 'baz', options: enumSchema.options } ),
+        config.invalid_enum_value( {
+            ...errorCtxMock,
+            data: 'baz',
+            options: enumSchema.options
+        } ),
     )
 } )
