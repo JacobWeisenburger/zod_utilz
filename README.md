@@ -10,12 +10,6 @@ Framework agnostic utilities for Zod
 - [Utilz](#api)
     - [SPR (SafeParseResult)](#spr)
     - [makeErrorMap](#makeerrormap)
-    - Partial Safe Parse (Coming Soon)
-  <!-- - [Partial Safe Parse](#partial-safe-parse) -->
-    - URLSearchParams (Coming Soon)
-  <!-- - [URLSearchParams](#urlsearchparams) -->
-    - FormData (Coming Soon)
-  <!-- - [FormData](#formdata) -->
 - [TODO](#todo)
 
 ## Purpose
@@ -92,3 +86,8 @@ zu.SPR( enumSchema.safeParse( 'baz' ) ).error?.issues[ 0 ].message,
 - Partial Safe Parse
 - URLSearchParams
 - FormData
+- BaseType (Recursively get the base type of a Zod type)
+  - zu.baseType( z.string() ) // z.string
+  - zu.baseType( z.string().optional() ) // z.string
+  - zu.baseType( z.string().optional().refine() ) // z.string
+  - zu.baseType( z.string().array().optional().refine() ) // z.array
