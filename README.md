@@ -48,7 +48,7 @@ This enables [optional chaining](https://developer.mozilla.org/en-US/docs/Web/Ja
 import { zu } from 'zod_utilz'
 const schema = z.object( { foo: z.string() } )
 const result = zu.SPR( schema.safeParse( { foo: 42 } ) )
-console.log( result.data?.foo ?? result.error?.format().foo?._errors )
+const fooDataOrErrors = result.data?.foo ?? result.error?.format().foo?._errors
 ```
 
 ### makeErrorMap
@@ -56,7 +56,7 @@ Simplifies the process of making a `ZodErrorMap`
 ```ts
 import { zu } from 'zod_utilz'
 
-const { errorMap } = zu.makeErrorMap( {
+const errorMap = zu.makeErrorMap( {
     required: 'Custom required message',
     invalid_type: ( { data } ) => `${ data } is an invalid type`,
     invalid_enum_value: ( { data, options } ) =>

@@ -1,2 +1,2 @@
-export { SPR } from './SPR.ts'
-export { makeErrorMap } from './makeErrorMap.ts'
+export * from './SPR.ts'
+export * from './makeErrorMap.ts'
