@@ -7,7 +7,7 @@ await emptyDir( './npm' )
 // https://deno.land/x?query=zod_utilz
 
 await build( {
-    entryPoints: [ './src/mod.ts' ],
+    entryPoints: [ './mod.ts' ],
     importMap: './import_map.json',
     outDir: './npm',
     shims: { deno: true },

@@ -1,8 +1,6 @@
 {
     "tasks": {
-        "start": "cmd.exe /c start bash -c 'deno run -A --watch index.ts'",
-        "test": "cmd.exe /c start bash -c 'deno test -A --watch ./'",
-        "README_Examples": "start bash -c 'deno run -A --watch README_Examples.ts'",
+        "test": "deno test -A --watch src",
         "build": "clear && deno run -A scripts/build_npm.ts",
         "publish": "clear && cd npm && npm publish"
     },
