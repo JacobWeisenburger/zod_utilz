@@ -87,7 +87,9 @@ zu.SPR( enumSchema.safeParse( 'baz' ) ).error?.issues[ 0 ].message
 - URLSearchParams
 - FormData
 - BaseType (Recursively get the base type of a Zod type)
-  - zu.baseType( z.string() ) // z.string
-  - zu.baseType( z.string().optional() ) // z.string
-  - zu.baseType( z.string().optional().refine() ) // z.string
-  - zu.baseType( z.string().array().optional().refine() ) // z.array
+    - zu.baseType( z.string() ) // z.string
+    - zu.baseType( z.string().optional() ) // z.string
+    - zu.baseType( z.string().optional().refine() ) // z.string
+    - zu.baseType( z.string().array().optional().refine() ) // z.array
+- GitHub Actions
+    - Auto publish to npm

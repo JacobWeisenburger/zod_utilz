@@ -14,7 +14,7 @@ import { zu } from '../mod.ts'
  * const fooDataOrErrors = result.data?.foo ?? result.error?.format().foo?._errors
  * ```
 */
-export function SPR<Input, Output> ( result: z.SafeParseReturnType<Input, Output> ) {
+export function SPR<Result extends z.SafeParseReturnType<any, any>> ( result: Result ) {
     return result.success
         ? { ...result, error: undefined }
         : { ...result, data: undefined }
