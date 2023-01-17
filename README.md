@@ -1,10 +1,10 @@
 <h1 align=center>Zod Utilz</h1>
-<h2 align=center>
+<h3 align=center>
     Framework agnostic utilities for
     <a href=https://github.com/colinhacks/zod rel=nofollow>
         Zod
     </a>
-</h2>
+</h3>
 
 <br>
 
