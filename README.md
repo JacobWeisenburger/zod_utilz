@@ -83,6 +83,7 @@ zu.SPR( enumSchema.safeParse( 'baz' ) ).error?.issues[ 0 ].message
 <!-- ### FormData -->
 
 ## TODO
+- useTypedParsers tests
 - Partial Safe Parse
 - URLSearchParams
 - FormData
