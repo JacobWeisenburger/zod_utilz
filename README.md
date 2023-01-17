@@ -133,3 +133,5 @@ schemaWithTypedParsers.parse( 'bar' )
   - zu.baseType( z.string().optional().refine() ) // z.string
   - zu.baseType( z.string().array().optional().refine() ) // z.array
 - Logo
+- GitHub Actions
+    - Auto publish to npm
