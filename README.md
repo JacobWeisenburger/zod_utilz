@@ -132,3 +132,4 @@ schemaWithTypedParsers.parse( 'bar' )
   - zu.baseType( z.string().optional() ) // z.string
   - zu.baseType( z.string().optional().refine() ) // z.string
   - zu.baseType( z.string().array().optional().refine() ) // z.array
+- Logo
