@@ -10,6 +10,7 @@ Framework agnostic utilities for Zod
 - [Utilz](#api)
     - [SPR (SafeParseResult)](#spr)
     - [makeErrorMap](#makeerrormap)
+    - [useTypedParsers](#usetypedparsers)
 - [TODO](#todo)
 
 ## Purpose
@@ -74,6 +75,19 @@ zu.SPR( enumSchema.safeParse( 'baz' ) ).error?.issues[ 0 ].message
 // baz is not a valid enum value. Valid options: foo | bar
 ```
 
+### useTypedParsers
+```ts
+import { zu } from 'zod_utilz'
+const schemaWithTypedParsers = zu.useTypedParsers( z.literal( 'foo' ) )
+
+schemaWithTypedParsers.parse( 'foo' )
+// no ts errors
+
+schemaWithTypedParsers.parse( 'bar' )
+//                            ^^^^^
+// Argument of type '"bar"' is not assignable to parameter of type '"foo"'
+```
+
 <!-- ### Partial Safe Parse -->
 <!-- https://gist.github.com/JacobWeisenburger/d5dbb4d5bcbb287b7661061a78536423 -->
 
@@ -83,7 +97,7 @@ zu.SPR( enumSchema.safeParse( 'baz' ) ).error?.issues[ 0 ].message
 <!-- ### FormData -->
 
 ## TODO
-- useTypedParsers tests
+- useTypedParsers README example
 - Partial Safe Parse
 - URLSearchParams
 - FormData

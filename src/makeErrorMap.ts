@@ -59,7 +59,7 @@ export type ErrorMapConfig = {
  * zu.SPR( enumSchema.safeParse( 'baz' ) ).error?.issues[ 0 ].message
  * // baz is not a valid enum value. Valid options: foo | bar
  * ```
-*/
+ */
 export function makeErrorMap ( config: ErrorMapConfig ): z.ZodErrorMap {
     return ( issue, ctx ) => {
         const errorCode: ErrorCode =
