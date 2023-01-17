@@ -1,21 +1,31 @@
-# Zod Utilz
-Framework agnostic utilities for Zod
+<h1 align=center>Zod Utilz</h1>
 
-<a href=https://github.com/JacobWeisenburger>
-    <img alt='Created by Jacob Weisenburger'
-        src=https://img.shields.io/badge/created%20by-Jacob%20Weisenburger-274D82.svg>
-</a>
-<a href=https://www.npmjs.com/package/zod_utilz>
-    <img alt=stars
-        src=https://img.shields.io/github/stars/JacobWeisenburger/zod_utilz?color=blue>
-</a>
-<a href=https://www.npmjs.com/package/zod_utilz>
-    <img alt=npm src=https://img.shields.io/npm/v/zod_utilz?color=blue>
-    <img alt=downloads src=https://img.shields.io/npm/dw/zod_utilz?color=blue>
-</a>
-<a href=https://deno.land/x/zod_utilz>
-    <img alt=deno src=https://shield.deno.dev/x/zod_utilz>
-</a>
+<p align=center>
+    Framework agnostic utilities for Zod
+</p>
+
+<br>
+
+<p align=center>
+    <a href=https://github.com/JacobWeisenburger>
+        <img alt='Created by Jacob Weisenburger'
+            src=https://img.shields.io/badge/created%20by-Jacob%20Weisenburger-274D82.svg>
+    </a>
+    <img alt=stars src=https://img.shields.io/github/stars/JacobWeisenburger/zod_utilz?color=blue>
+    <a href=https://www.npmjs.com/package/zod_utilz>
+        <img alt=npm src=https://img.shields.io/npm/v/zod_utilz?color=blue>
+        <img alt=downloads src=https://img.shields.io/npm/dw/zod_utilz?color=blue>
+    </a>
+    <a href=https://deno.land/x/zod_utilz>
+        <img alt=deno src=https://shield.deno.dev/x/zod_utilz>
+    </a>
+</p>
+
+<div align=center>
+    <a href=https://www.npmjs.com/package/zod>npm</a>
+    <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
+    <a href=https://deno.land/x/zod_utilz>deno</a>
+</div>
 
 ## Table of contents
 - [Purpose](#purpose)
