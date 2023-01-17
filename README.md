@@ -124,6 +124,9 @@ schemaWithTypedParsers.parse( 'bar' )
 <!-- ### FormData -->
 
 ## TODO
+- Safe Coercion
+    - https://github.com/colinhacks/zod/discussions/1897
+- Custom Coercion?
 - Partial Safe Parse
 - URLSearchParams
 - FormData
