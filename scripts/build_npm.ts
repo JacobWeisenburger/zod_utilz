@@ -13,7 +13,7 @@ await build( {
     shims: { deno: true },
     package: {
         name: 'zod_utilz',
-        version: '0.1.3',
+        version: '0.1.4',
         author: 'JacobWeisenburger',
         description: 'Framework agnostic utilities for Zod',
         license: 'MIT',

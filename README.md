@@ -97,7 +97,6 @@ schemaWithTypedParsers.parse( 'bar' )
 <!-- ### FormData -->
 
 ## TODO
-- useTypedParsers README example
 - Partial Safe Parse
 - URLSearchParams
 - FormData
