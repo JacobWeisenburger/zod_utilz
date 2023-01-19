@@ -107,3 +107,12 @@ function toArray<T> ( value: T ): T[] {
     if ( Array.isArray( value ) ) return value
     return [ value ]
 }
+
+// function coerceToArray<
+//     Schema extends z.ZodArray<z.ZodTypeAny>
+// > ( schema: Schema ) {
+//     return z.union( [
+//         z.any().array(),
+//         z.any().transform( x => [ x ] ),
+//     ] ).pipe( schema )
+// }
