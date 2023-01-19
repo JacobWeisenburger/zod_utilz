@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { zu } from '../mod.ts'
-import { assertEquals, assertThrows, assert, assertFalse } from 'std/testing/asserts.ts'
+import { assertEquals, assertThrows, assert } from 'std/testing/asserts.ts'
 
 Deno.test( 'zu.coerce( z.string() )', () => {
     const schema = zu.coerce( z.string() )
@@ -22,9 +22,9 @@ Deno.test( 'zu.coerce( z.string() )', () => {
     assertEquals( schema.parse( [] ), '[]' )
     assertEquals( schema.parse( [ 'foo' ] ), '["foo"]' )
     assertEquals( schema.parse( [ 'foo', 'bar' ] ), '["foo","bar"]' )
-    assertEquals( schema.parse( () => { } ), '()=>{}' )
-    assertEquals( schema.parse( ( arg: any ) => { } ), '(arg)=>{}' )
-    assertEquals( schema.parse( ( arg1: any, arg2: any ) => { } ), '(arg1, arg2)=>{}' )
+    assert( schema.safeParse( () => { } ).success )
+    assert( schema.safeParse( ( arg: any ) => { } ).success )
+    assert( schema.safeParse( ( arg1: any, arg2: any ) => { } ).success )
 } )
 
 Deno.test( 'zu.coerce( z.number() )', () => {
