@@ -32,6 +32,8 @@
 
 ## Table of contents
 - [Purpose](#purpose)
+- [Contribute](#contribute)
+- [Yet another library](#yet-another-library)
 - [Installation](#installation)
     - [From npm (Node/Bun)](#from-npm-nodebun)
 - [Getting Started](#getting-started)
@@ -45,7 +47,17 @@
 - [TODO](#todo)
 
 ## Purpose
-To fill the gap of features that might be missing in Zod. Always open to suggestions. Feel free to contribute an issue or PR.
+- Simplify common tasks in [Zod](https://github.com/colinhacks/zod)
+- Fill the gap of features that might be missing in [Zod](https://github.com/colinhacks/zod)
+- Provide implementations for potential new features in [Zod](https://github.com/colinhacks/zod)
+
+## Contribute
+Always open to ideas. Positive or negative, all are welcome. Feel free to contribute an issue or PR.
+
+## Yet another library
+You might not want to install yet another library only to get access to that one [Util](#utilz) you need. No worries. Feel free to copy and paste the code you need into your project. It won't get updated when this library gets updated, but it will reduce your bundle size. :D.
+
+Perhaps in the future there will be a way to install only the [Utilz](#utilz) you need.
 
 ## Installation
 
