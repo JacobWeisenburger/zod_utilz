@@ -3,8 +3,6 @@ import { z } from 'zod'
 type ParseMethods = 'parse' | 'parseAsync' | 'safeParse' | 'safeParseAsync'
 
 /**
- * Simplifies the process of making a `ZodErrorMap`
- * 
  * ### Usage:
  * ```
  * import { zu } from 'zod_utilz'

@@ -152,6 +152,7 @@ zu.SPR( schema.safeParse( 'foo' ) ).error?.issues[ 0 ].message
   - zu.baseType( z.string().optional() ) // z.string
   - zu.baseType( z.string().optional().refine() ) // z.string
   - zu.baseType( z.string().array().optional().refine() ) // z.array
+- Make process for minifying
 - Logo
 - GitHub Actions
     - Auto publish to npm
