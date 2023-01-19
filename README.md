@@ -44,7 +44,7 @@
 - [TODO](#todo)
 
 ## Purpose
-To fill the gap of features that might be missing in Zod. Always open to suggestions. Feel free to open an issue or PR.
+To fill the gap of features that might be missing in Zod. Always open to suggestions. Feel free to contribute an issue or PR.
 
 ## Installation
 
@@ -137,23 +137,22 @@ zu.SPR( schema.safeParse( 'foo' ) ).error?.issues[ 0 ].message
 // 'Expected bigint, received string'
 ```
 
-<!-- ### Partial Safe Parse -->
-<!-- https://gist.github.com/JacobWeisenburger/d5dbb4d5bcbb287b7661061a78536423 -->
-
-<!-- ### URLSearchParams -->
-<!-- https://gist.github.com/JacobWeisenburger/9256eae415f6b0a04b718d633266a4e0 -->
-
-<!-- ### FormData -->
-
 ## TODO
+Always open to suggestions. Feel free to contribute an issue or PR.
 - zu.coerce
     - z.date()
+    - z.array()
+        - recursively do coercion on items
+        - z.string().array()
+        - z.number().array()
     - z.object()
         - recursively do coercion on props
         - https://github.com/colinhacks/zod/discussions/1910
-- Partial Safe Parse
 - URLSearchParams
+    - https://gist.github.com/JacobWeisenburger/9256eae415f6b0a04b718d633266a4e0
 - FormData
+- Partial Safe Parse
+    - https://gist.github.com/JacobWeisenburger/d5dbb4d5bcbb287b7661061a78536423
 - BaseType (Recursively get the base type of a Zod type)
   - zu.baseType( z.string() ) // z.string
   - zu.baseType( z.string().optional() ) // z.string
