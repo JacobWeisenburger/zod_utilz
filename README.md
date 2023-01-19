@@ -115,6 +115,17 @@ schemaWithTypedParsers.parse( 'bar' )
 // Argument of type '"bar"' is not assignable to parameter of type '"foo"'
 ```
 
+### coerce
+Treats coercion errors like normal zod errors. Prevents throwing errors when using `safeParse`.
+```ts
+import { zu } from 'zod_utilz'
+const schema = zu.coerce( z.bigint() )
+zu.SPR( schema.safeParse( '42' ) ).data
+// 42n
+zu.SPR( schema.safeParse( 'foo' ) ).error?.issues[ 0 ].message
+// 'Expected bigint, received string'
+```
+
 <!-- ### Partial Safe Parse -->
 <!-- https://gist.github.com/JacobWeisenburger/d5dbb4d5bcbb287b7661061a78536423 -->
 
@@ -124,9 +135,15 @@ schemaWithTypedParsers.parse( 'bar' )
 <!-- ### FormData -->
 
 ## TODO
-- Safe Coercion
+- zu.coerce
+    - z.date()
+    - z.object()
+        - recursively do coercion on props
+        - https://github.com/colinhacks/zod/discussions/1910
+<!-- - Safe Coercion
     - https://github.com/colinhacks/zod/discussions/1897
-- Custom Coercion?
+    - https://github.com/colinhacks/zod/discussions/1856
+    - https://github.com/colinhacks/zod/issues/1911 -->
 - Partial Safe Parse
 - URLSearchParams
 - FormData
