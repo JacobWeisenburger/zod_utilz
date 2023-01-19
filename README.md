@@ -203,10 +203,10 @@ Always open to ideas. Positive or negative, all are welcome. Feel free to contri
 - Partial Safe Parse
     - https://gist.github.com/JacobWeisenburger/d5dbb4d5bcbb287b7661061a78536423
 - BaseType (Recursively get the base type of a Zod type)
-  - zu.baseType( z.string() ) // z.string
-  - zu.baseType( z.string().optional() ) // z.string
-  - zu.baseType( z.string().optional().refine() ) // z.string
-  - zu.baseType( z.string().array().optional().refine() ) // z.array
+  - zu.baseType( z.string() ) => z.string()
+  - zu.baseType( z.string().optional() ) => z.string()
+  - zu.baseType( z.string().optional().refine() ) => z.string()
+  - zu.baseType( z.string().array().optional().refine() ) => z.string().array()
 - Make process for minifying
 - Logo
 - GitHub Actions
