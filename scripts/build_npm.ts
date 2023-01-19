@@ -3,9 +3,6 @@ import { build, emptyDir } from 'dnt'
 
 await emptyDir( './npm' )
 
-// https://deno.land/x/zod_utilz/mod.ts
-// https://deno.land/x?query=zod_utilz
-
 await build( {
     entryPoints: [ './mod.ts' ],
     importMap: './import_map.json',
@@ -18,6 +15,7 @@ await build( {
         description: 'Framework agnostic utilities for Zod',
         license: 'MIT',
         // npm: 'https://www.npmjs.com/package/zod_utilz',
+        // deno: 'https://deno.land/x/zod_utilz',
         repository: 'https://github.com/JacobWeisenburger/zod_utilz',
         homepage: 'https://github.com/JacobWeisenburger/zod_utilz',
     },

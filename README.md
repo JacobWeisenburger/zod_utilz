@@ -38,6 +38,7 @@
     - [SPR (SafeParseResult)](#spr)
     - [makeErrorMap](#makeerrormap)
     - [useTypedParsers](#usetypedparsers)
+    - [coerce](#coerce)
 - [TODO](#todo)
 
 ## Purpose
