@@ -41,6 +41,7 @@
     - [makeErrorMap](#makeerrormap)
     - [useTypedParsers](#usetypedparsers)
     - [coerce](#coerce)
+    - [useURLSearchParams](#useURLSearchParams)
 - [TODO](#todo)
 
 ## Purpose
