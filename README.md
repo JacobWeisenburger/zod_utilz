@@ -137,6 +137,44 @@ zu.SPR( schema.safeParse( 'foo' ) ).error?.issues[ 0 ].message
 // 'Expected bigint, received string'
 ```
 
+### useURLSearchParams
+A way to parse URLSearchParams
+```ts
+import { zu } from 'zod_utilz'
+const schema = zu.useURLSearchParams(
+    z.object( {
+        string: z.string(),
+        number: z.number(),
+        boolean: z.boolean(),
+    } )
+)
+
+zu.SPR( schema.safeParse(
+    new URLSearchParams( {
+        string: 'foo',
+        number: '42',
+        boolean: 'false',
+    } )
+) ).data
+// { string: 'foo', number: 42, boolean: false }
+
+zu.SPR( schema.safeParse(
+    new URLSearchParams( {
+        string: '42',
+        number: 'false',
+        boolean: 'foo',
+    } )
+) ).error?.format()
+// {
+//     formErrors: [],
+//     fieldErrors: {
+//         string: [ 'Expected string, received number' ],
+//         number: [ 'Expected number, received boolean' ],
+//         boolean: [ 'Expected boolean, received string' ],
+//     }
+// }
+```
+
 ## TODO
 Always open to suggestions. Feel free to contribute an issue or PR.
 - zu.coerce
@@ -148,8 +186,6 @@ Always open to suggestions. Feel free to contribute an issue or PR.
     - z.object()
         - recursively do coercion on props
         - https://github.com/colinhacks/zod/discussions/1910
-- URLSearchParams
-    - https://gist.github.com/JacobWeisenburger/9256eae415f6b0a04b718d633266a4e0
 - FormData
 - Partial Safe Parse
     - https://gist.github.com/JacobWeisenburger/d5dbb4d5bcbb287b7661061a78536423
