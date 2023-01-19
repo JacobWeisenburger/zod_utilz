@@ -189,7 +189,7 @@ zu.SPR( schema.safeParse(
 ```
 
 ## TODO
-Always open to suggestions. Feel free to contribute an issue or PR.
+Always open to ideas. Positive or negative, all are welcome. Feel free to contribute an [issue](https://github.com/JacobWeisenburger/zod_utilz/issues) or [PR](https://github.com/JacobWeisenburger/zod_utilz/pulls).
 - zu.coerce
     - z.date()
     - z.array()
