@@ -36,12 +36,12 @@
     - [From npm (Node/Bun)](#from-npm-nodebun)
 - [Getting Started](#getting-started)
     - [import](#import)
-- [Utilz](#api)
+- [Utilz](#utilz)
     - [SPR (SafeParseResult)](#spr)
     - [makeErrorMap](#makeerrormap)
     - [useTypedParsers](#usetypedparsers)
     - [coerce](#coerce)
-    - [useURLSearchParams](#useURLSearchParams)
+    - [useURLSearchParams](#useurlsearchparams)
 - [TODO](#todo)
 
 ## Purpose
