@@ -13,7 +13,7 @@
         <img alt='Created by Jacob Weisenburger'
             src=https://img.shields.io/badge/created%20by-Jacob%20Weisenburger-274D82.svg>
     </a>
-    <a href=https://github.com/JacobWeisenburger/zod_utilz rel=nofollow>
+    <a href=https://github.com/JacobWeisenburger/zod_utilz/stargazers rel=nofollow>
         <img alt=stars src=https://img.shields.io/github/stars/JacobWeisenburger/zod_utilz?color=blue>
     </a>
     <a href=https://www.npmjs.com/package/zod_utilz rel=nofollow>
