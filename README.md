@@ -115,6 +115,7 @@ zu.SPR( enumSchema.safeParse( 'baz' ) ).error?.issues[ 0 ].message
 ```
 
 ### useTypedParsers
+Enables compile time type checking for zod parsers.
 ```ts
 import { zu } from 'zod_utilz'
 const schemaWithTypedParsers = zu.useTypedParsers( z.literal( 'foo' ) )

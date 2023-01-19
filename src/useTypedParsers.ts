@@ -3,6 +3,8 @@ import { z } from 'zod'
 type ParseMethods = 'parse' | 'parseAsync' | 'safeParse' | 'safeParseAsync'
 
 /**
+ * Enables compile time type checking for zod parsers.
+ * 
  * ### Usage:
  * ```
  * import { zu } from 'zod_utilz'
