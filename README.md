@@ -55,7 +55,7 @@
 Always open to ideas. Positive or negative, all are welcome. Feel free to contribute an [issue](https://github.com/JacobWeisenburger/zod_utilz/issues) or [PR](https://github.com/JacobWeisenburger/zod_utilz/pulls).
 
 ## Yet another library
-You might not want to install yet another library only to get access to that one [Util](#utilz) you need. No worries. Feel free to copy and paste the code you need into your project. It won't get updated when this library gets updated, but it will reduce your bundle size. :D.
+You might not want to install yet another library only to get access to that one [Util](#utilz) you need. No worries. Feel free to copy and paste the code you need into your project. It won't get updated when this library gets updated, but it will reduce your bundle size. :D
 
 Perhaps in the future there will be a way to install only the [Utilz](#utilz) you need. If you know how to do this, please [let me know](https://github.com/JacobWeisenburger/zod_utilz/issues).
 
