@@ -103,9 +103,7 @@ zu.SPR( stringSchema.safeParse( undefined ) ).error?.issues[ 0 ].message
 zu.SPR( stringSchema.safeParse( 42 ) ).error?.issues[ 0 ].message
 // 42 is an invalid type
 
-zu.SPR( stringSchema.safeParse(
-    'this string is over the maximum length'
-) ).error?.issues[ 0 ].message
+zu.SPR( stringSchema.safeParse( 'this string is over the maximum length' ) ).error?.issues[ 0 ].message
 // Maximum length is 32
 
 const enumSchema = z.enum( [ 'foo', 'bar' ], { errorMap } )
