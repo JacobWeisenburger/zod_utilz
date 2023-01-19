@@ -181,11 +181,11 @@ Always open to suggestions. Feel free to contribute an issue or PR.
 - zu.coerce
     - z.date()
     - z.array()
-        - recursively do coercion on items
+        - recursively coerce items
         - z.string().array()
         - z.number().array()
     - z.object()
-        - recursively do coercion on props
+        - recursively coerce props
         - https://github.com/colinhacks/zod/discussions/1910
 - FormData
 - Partial Safe Parse
