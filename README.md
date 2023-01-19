@@ -90,17 +90,26 @@ import { zu } from 'zod_utilz'
 const errorMap = zu.makeErrorMap( {
     required: 'Custom required message',
     invalid_type: ( { data } ) => `${ data } is an invalid type`,
+    too_big: ( { maximum } ) => `Maximum length is ${ maximum }`,
     invalid_enum_value: ( { data, options } ) =>
         `${ data } is not a valid enum value. Valid options: ${ options?.join( ' | ' ) } `,
 } )
 
-const stringSchema = z.string( { errorMap } )
+const stringSchema = z.string( { errorMap } ).max( 32 )
+
 zu.SPR( stringSchema.safeParse( undefined ) ).error?.issues[ 0 ].message
 // Custom required message
+
 zu.SPR( stringSchema.safeParse( 42 ) ).error?.issues[ 0 ].message
 // 42 is an invalid type
 
+zu.SPR( stringSchema.safeParse(
+    'this string is over the maximum length'
+) ).error?.issues[ 0 ].message
+// Maximum length is 32
+
 const enumSchema = z.enum( [ 'foo', 'bar' ], { errorMap } )
+
 zu.SPR( enumSchema.safeParse( 'baz' ) ).error?.issues[ 0 ].message
 // baz is not a valid enum value. Valid options: foo | bar
 ```

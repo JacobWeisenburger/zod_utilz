@@ -170,14 +170,16 @@ Deno.test( 'z.date( { errorMap } )', () => {
 Deno.test( 'README Example', () => {
     const config = {
         required: 'Custom required message',
-        invalid_type: ( { code, data } ) => `${ data } is an invalid type`,
+        invalid_type: ( { data } ) => `${ data } is an invalid type`,
+        too_big: ( { maximum } ) => `Maximum length is ${ maximum }`,
         invalid_enum_value: ( { data, options } ) =>
             `${ data } is not a valid enum value. Valid options: ${ options?.join( ' | ' ) } `,
     } satisfies Parameters<typeof zu.makeErrorMap>[ 0 ]
 
     const errorMap = zu.makeErrorMap( config )
 
-    const stringSchema = z.string( { errorMap } )
+    const maximum = 32
+    const stringSchema = z.string( { errorMap } ).max( maximum )
 
     assertEquals(
         zu.SPR( stringSchema.safeParse( undefined ) ).error?.issues[ 0 ].message,
@@ -188,6 +190,18 @@ Deno.test( 'README Example', () => {
         config.invalid_type( {
             ...errorCtxMock,
             data: 42
+        } ),
+    )
+    assertEquals(
+        zu.SPR(
+            stringSchema.safeParse( 'this string is over the maximum length' )
+        ).error?.issues[ 0 ].message,
+        config.too_big( {
+            ...errorCtxMock,
+            code: 'too_big',
+            type: 'string',
+            maximum,
+            inclusive: true,
         } ),
     )
 
