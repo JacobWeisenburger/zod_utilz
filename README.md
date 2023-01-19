@@ -13,7 +13,9 @@
         <img alt='Created by Jacob Weisenburger'
             src=https://img.shields.io/badge/created%20by-Jacob%20Weisenburger-274D82.svg>
     </a>
-    <img alt=stars src=https://img.shields.io/github/stars/JacobWeisenburger/zod_utilz?color=blue>
+    <a href=https://github.com/JacobWeisenburger/zod_utilz rel=nofollow>
+        <img alt=stars src=https://img.shields.io/github/stars/JacobWeisenburger/zod_utilz?color=blue>
+    </a>
     <a href=https://www.npmjs.com/package/zod_utilz rel=nofollow>
         <img alt=downloads src=https://img.shields.io/npm/dw/zod_utilz?color=blue>
     </a>
