@@ -145,14 +145,11 @@ Deno.test( 'README Example', () => {
                 number: 'false',
                 boolean: 'foo',
             } )
-        ) ).error?.flatten(),
+        ) ).error?.flatten().fieldErrors,
         {
-            formErrors: [],
-            fieldErrors: {
-                string: [ 'Expected string, received number' ],
-                number: [ 'Expected number, received boolean' ],
-                boolean: [ 'Expected boolean, received string' ],
-            }
+            string: [ 'Expected string, received number' ],
+            number: [ 'Expected number, received boolean' ],
+            boolean: [ 'Expected boolean, received string' ],
         } as any
     )
 } )
