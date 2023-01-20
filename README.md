@@ -1,10 +1,13 @@
-<h1 align=center>Zod Utilz</h1>
-<h3 align=center>
-    Framework agnostic utilities for
-    <a href=https://github.com/colinhacks/zod rel=nofollow>
-        Zod
-    </a>
-</h3>
+<p align="center">
+    <img src=logo.svg width=200px align=center alt='Zod Utilz logo' />
+    <h1 align=center>Zod Utilz</h1>
+    <h3 align=center>
+        Framework agnostic utilities for
+        <a href=https://github.com/colinhacks/zod rel=nofollow>
+            Zod
+        </a>
+    </h3>
+</p>
 
 <br>
 
@@ -72,12 +75,15 @@ bun add zod_utilz
 ## Getting Started
 
 ### import
+#### [Node/Bun](https://www.npmjs.com/package/zod_utilz)
 ```ts
-// Node/Bun
 import { zu } from 'zod_utilz'
+```
 
-// Deno
+#### [Deno](https://deno.land/x/zod_utilz)
+```ts
 import { zu } from 'https://deno.land/x/zod_utilz/mod.ts'
+// or
 import { zu } from 'npm:zod_utilz'
 ```
 

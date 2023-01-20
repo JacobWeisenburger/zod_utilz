@@ -8,9 +8,16 @@ await build( {
     importMap: './import_map.json',
     outDir: './npm',
     shims: { deno: true },
+    mappings: {
+        'https://deno.land/x/zod@v3.20.2/mod.ts': {
+            name: 'zod',
+            version: '^3.20.2',
+            peerDependency: true,
+        }
+    },
     package: {
         name: 'zod_utilz',
-        version: '0.2.1',
+        version: '0.3.0',
         author: 'JacobWeisenburger',
         description: 'Framework agnostic utilities for Zod',
         license: 'MIT',
