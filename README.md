@@ -1,4 +1,4 @@
-<div align='center' style='text-align: center;'>
+<div align='center'>
     <img src='logo.svg' width='200px' alt='Zod Utilz logo' />
     <h1>Zod Utilz</h1>
     <h3>
@@ -11,7 +11,7 @@
 
 <br>
 
-<div align='center' style='text-align: center;'>
+<div align='center'>
     <a href='https://github.com/JacobWeisenburger' rel='nofollow'>
         <img alt='Created by Jacob Weisenburger'
             src='https://img.shields.io/badge/created%20by-Jacob%20Weisenburger-274D82.svg'>
@@ -24,7 +24,7 @@
     </a>
 </div>
 
-<div align='center' style='text-align: center;'>
+<div align='center'>
     <a href='https://www.npmjs.com/package/zod_utilz' rel='nofollow'>
         <img alt='npm' src='https://img.shields.io/npm/v/zod_utilz?color=blue'>
     </a>
