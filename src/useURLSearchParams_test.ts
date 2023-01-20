@@ -102,7 +102,7 @@ Deno.test( 'useURLSearchParams sad path', () => {
             formErrors: [],
             fieldErrors: {
                 oneStringInArray: [ 'Array must contain exactly 1 element(s)' ],
-                oneNumberInArray: [ 'Expected number, received string' ],
+                oneNumberInArray: [ 'Expected number, received nan' ],
                 stringMin1: [ 'String must contain at least 1 character(s)' ],
                 posNumber: [ 'Number must be greater than 0' ],
                 range: [ 'Number must be less than or equal to 5' ],

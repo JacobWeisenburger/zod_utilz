@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { zu } from '../mod.ts'
 import { assertEquals, assertThrows, assert } from 'std/testing/asserts.ts'
 
-Deno.test( 'zu.coerce( z.string() )', () => {
+Deno.test( 'coerce( z.string() )', () => {
     const schema = zu.coerce( z.string() )
 
     /* primitives */
@@ -22,12 +22,12 @@ Deno.test( 'zu.coerce( z.string() )', () => {
     assertEquals( schema.parse( [] ), '[]' )
     assertEquals( schema.parse( [ 'foo' ] ), '["foo"]' )
     assertEquals( schema.parse( [ 'foo', 'bar' ] ), '["foo","bar"]' )
-    assert( schema.safeParse( () => { } ).success )
-    assert( schema.safeParse( ( arg: any ) => { } ).success )
-    assert( schema.safeParse( ( arg1: any, arg2: any ) => { } ).success )
+    assert( schema.parse( () => { } ) )
+    assert( schema.parse( ( arg: any ) => { } ) )
+    assert( schema.parse( ( arg1: any, arg2: any ) => { } ) )
 } )
 
-Deno.test( 'zu.coerce( z.number() )', () => {
+Deno.test( 'coerce( z.number() )', () => {
     const schema = zu.coerce( z.number() )
 
     /* primitives */
@@ -53,7 +53,7 @@ Deno.test( 'zu.coerce( z.number() )', () => {
     assertThrows( () => schema.parse( ( arg1: any, arg2: any ) => { } ) )
 } )
 
-Deno.test( 'zu.coerce( z.bigint() )', () => {
+Deno.test( 'coerce( z.bigint() )', () => {
     const schema = zu.coerce( z.bigint() )
 
     /* primitives */
@@ -80,9 +80,8 @@ Deno.test( 'zu.coerce( z.bigint() )', () => {
     assertThrows( () => schema.parse( ( arg1: any, arg2: any ) => { } ) )
 } )
 
-Deno.test( 'zu.coerce( z.boolean() )', () => {
+Deno.test( 'coerce( z.boolean() )', () => {
     const schema = zu.coerce( z.boolean() )
-    // const schema = z.boolean().transform( ( value ) =>  'true' )
 
     /* primitives */
     assertEquals( schema.parse( 'false' ), false )
@@ -109,7 +108,7 @@ Deno.test( 'zu.coerce( z.boolean() )', () => {
     assertEquals( schema.parse( ( arg1: any, arg2: any ) => { } ), true )
 } )
 
-Deno.test( 'zu.coerce( z.any().array() )', () => {
+Deno.test( 'coerce( z.any().array() )', () => {
     const schema = zu.coerce( z.any().array() )
 
     /* primitives */
@@ -142,11 +141,8 @@ Deno.test( 'zu.coerce( z.any().array() )', () => {
     assertEquals( schema.parse( fn3 ), [ fn3 ] )
 } )
 
-Deno.test( 'zu.coerce( z.string().array() )', () => {
-    const schema = zu.coerce( zu.coerce( z.string() ).array() )
-
-    // TODO
-    // const schema = zu.coerce( z.string().array() )
+Deno.test( 'coerce( z.string().array() )', () => {
+    const schema = zu.coerce( z.string().array() )
 
     /* primitives */
     assertEquals( schema.parse( 'foo' ), [ 'foo' ] )
@@ -167,16 +163,15 @@ Deno.test( 'zu.coerce( z.string().array() )', () => {
     assertEquals( schema.parse( [] ), [] )
     assertEquals( schema.parse( [ 'foo' ] ), [ 'foo' ] )
     assertEquals( schema.parse( [ 'foo', 'bar' ] ), [ 'foo', 'bar' ] )
-    assert( schema.safeParse( () => { } ).success )
-    assert( schema.safeParse( ( arg: any ) => { } ).success )
-    assert( schema.safeParse( ( arg1: any, arg2: any ) => { } ).success )
+    assertEquals( schema.parse( [ 'foo', '42' ] ), [ 'foo', '42' ] )
+    assertEquals( schema.parse( [ '42', '42' ] ), [ '42', '42' ] )
+    assert( schema.parse( () => { } ) )
+    assert( schema.parse( ( arg: any ) => { } ) )
+    assert( schema.parse( ( arg1: any, arg2: any ) => { } ) )
 } )
 
-Deno.test( 'zu.coerce( z.number().array() )', () => {
-    const schema = zu.coerce( zu.coerce( z.number() ).array() )
-
-    // TODO
-    // const schema = zu.coerce( z.number().array() )
+Deno.test( 'coerce( z.number().array() )', () => {
+    const schema = zu.coerce( z.number().array() )
 
     /* primitives */
     assertThrows( () => schema.parse( 'foo' ) )
@@ -189,16 +184,77 @@ Deno.test( 'zu.coerce( z.number().array() )', () => {
     assertThrows( () => schema.parse( Symbol( 'symbol' ) ) )
     assertThrows( () => schema.parse( null ) )
 
-    // /* objects */
+    /* objects */
     assertThrows( () => schema.parse( {} ) )
     assertThrows( () => schema.parse( { foo: 'foo' } ) )
     assertThrows( () => schema.parse( { foo: 'foo', bar: 'bar' } ) )
     assertEquals( schema.parse( [] ), [] )
     assertThrows( () => schema.parse( [ 'foo' ] ) )
     assertThrows( () => schema.parse( [ 'foo', 'bar' ] ) )
+    assertThrows( () => schema.parse( [ 'foo', '42' ] ) )
+    assertEquals( schema.parse( [ '42', '42' ] ), [ 42, 42 ] )
     assertThrows( () => schema.parse( () => { } ) )
     assertThrows( () => schema.parse( ( arg: any ) => { } ) )
     assertThrows( () => schema.parse( ( arg1: any, arg2: any ) => { } ) )
+} )
+
+Deno.test( 'coerce( z.bigint().array() )', () => {
+    const schema = zu.coerce( z.bigint().array() )
+
+    /* primitives */
+    assertThrows( () => schema.parse( 'foo' ) )
+    assertEquals( schema.parse( '42' ), [ 42n ] )
+    assertEquals( schema.parse( '42n' ), [ 42n ] )
+    assertEquals( schema.parse( 42 ), [ 42n ] )
+    assertEquals( schema.parse( 42n ), [ 42n ] )
+    assertEquals( schema.parse( true ), [ 1n ] )
+    assertEquals( schema.parse( false ), [ 0n ] )
+    assertThrows( () => schema.parse( undefined ) )
+    assertThrows( () => schema.parse( Symbol( 'symbol' ) ) )
+    assertThrows( () => schema.parse( null ) )
+
+    /* objects */
+    assertThrows( () => schema.parse( {} ) )
+    assertThrows( () => schema.parse( { foo: 'foo' } ) )
+    assertThrows( () => schema.parse( { foo: 'foo', bar: 'bar' } ) )
+    assertEquals( schema.parse( [] ), [] )
+    assertThrows( () => schema.parse( [ 'foo' ] ) )
+    assertThrows( () => schema.parse( [ 'foo', 'bar' ] ) )
+    assertThrows( () => schema.parse( [ 'foo', '42' ] ) )
+    assertEquals( schema.parse( [ '42', '42' ] ), [ 42n, 42n ] )
+    assertThrows( () => schema.parse( () => { } ) )
+    assertThrows( () => schema.parse( ( arg: any ) => { } ) )
+    assertThrows( () => schema.parse( ( arg1: any, arg2: any ) => { } ) )
+} )
+
+Deno.test( 'coerce( z.boolean().array() )', () => {
+    const schema = zu.coerce( z.boolean().array() )
+
+    /* primitives */
+    assertEquals( schema.parse( 'false' ), [ false ] )
+    assertEquals( schema.parse( 'true' ), [ true ] )
+    assertEquals( schema.parse( 'foo' ), [ true ] )
+    assertEquals( schema.parse( 0 ), [ false ] )
+    assertEquals( schema.parse( 42 ), [ true ] )
+    assertEquals( schema.parse( 42n ), [ true ] )
+    assertEquals( schema.parse( true ), [ true ] )
+    assertEquals( schema.parse( false ), [ false ] )
+    assertEquals( schema.parse( undefined ), [ false ] )
+    assertEquals( schema.parse( Symbol( 'symbol' ) ), [ true ] )
+    assertEquals( schema.parse( null ), [ false ] )
+
+    /* objects */
+    assertEquals( schema.parse( {} ), [ true ] )
+    assertEquals( schema.parse( { foo: 'foo' } ), [ true ] )
+    assertEquals( schema.parse( { foo: 'foo', bar: 'bar' } ), [ true ] )
+    assertEquals( schema.parse( [] ), [] )
+    assertEquals( schema.parse( [ 'foo' ] ), [ true ] )
+    assertEquals( schema.parse( [ 'foo', 'bar' ] ), [ true, true ] )
+    assertEquals( schema.parse( [ 'foo', 'false' ] ), [ true, false ] )
+    assertEquals( schema.parse( [ 'false', 'false' ] ), [ false, false ] )
+    assertEquals( schema.parse( () => { } ), [ true ] )
+    assertEquals( schema.parse( ( arg: any ) => { } ), [ true ] )
+    assertEquals( schema.parse( ( arg1: any, arg2: any ) => { } ), [ true ] )
 } )
 
 Deno.test( 'README Example: bigint', () => {

@@ -10,6 +10,7 @@ import { z } from 'zod'
 // null
 
 type AllowedZodTypes =
+    | z.ZodAny
     | z.ZodString
     | z.ZodNumber
     | z.ZodBoolean
@@ -38,11 +39,12 @@ export function coerce<Schema extends AllowedZodTypes> ( schema: Schema ) {
 }
 
 function getTransformer<Schema extends AllowedZodTypes> ( schema: Schema ) {
+    if ( schema instanceof z.ZodAny ) return ( value: any ) => value
     if ( schema instanceof z.ZodString ) return toString
     if ( schema instanceof z.ZodNumber ) return toNumber
     if ( schema instanceof z.ZodBoolean ) return toBoolean
     if ( schema instanceof z.ZodBigInt ) return toBigInt
-    if ( schema instanceof z.ZodArray ) return toArray
+    if ( schema instanceof z.ZodArray ) return toArray( schema )
 
     throw new Error( `${ schema!.constructor.name } is not supported by zu.coerce` )
 }
@@ -103,16 +105,10 @@ function toBoolean ( value: any ): boolean {
     return false
 }
 
-function toArray<T> ( value: T ): T[] {
-    if ( Array.isArray( value ) ) return value
-    return [ value ]
+function toArray<Schema extends z.ZodArray<z.ZodTypeAny>> ( schema: Schema ) {
+    const itemTransformer = getTransformer( schema._def.type )
+    return ( value: z.input<Schema> ): z.output<Schema>[] => {
+        if ( Array.isArray( value ) ) return value.map( itemTransformer )
+        return [ value ].map( itemTransformer )
+    }
 }
-
-// function coerceToArray<
-//     Schema extends z.ZodArray<z.ZodTypeAny>
-// > ( schema: Schema ) {
-//     return z.union( [
-//         z.any().array(),
-//         z.any().transform( x => [ x ] ),
-//     ] ).pipe( schema )
-// }
