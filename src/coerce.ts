@@ -22,15 +22,37 @@ type AllowedZodTypes =
 /**
  * Treats coercion errors like normal zod errors. Prevents throwing errors when using `safeParse`.
  * 
- * ### Usage:
- * ```
+ * @example
  * import { zu } from 'zod_utilz'
- * const schema = zu.coerce( z.bigint() )
- * zu.SPR( schema.safeParse( '42' ) ).data
- * // 42n
- * zu.SPR( schema.safeParse( 'foo' ) ).error?.issues[ 0 ].message
+ * const bigintSchema = zu.coerce( z.bigint() )
+ * bigintSchema.parse( '42' ) // 42n
+ * bigintSchema.parse( '42n' ) // 42n
+ * zu.SPR( bigintSchema.safeParse( 'foo' ) ).error?.issues[ 0 ].message
  * // 'Expected bigint, received string'
- * ```
+ * 
+ * @example
+ * const booleanSchema = zu.coerce( z.boolean() )
+ * 
+ * // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+ * // only exception to normal boolean coercion rules
+ * booleanSchema.parse( 'false' ) // false
+ * 
+ * // https://developer.mozilla.org/en-US/docs/Glossary/Falsy
+ * // falsy => false
+ * booleanSchema.parse( false ) // false
+ * booleanSchema.parse( 0 ) // false
+ * booleanSchema.parse( -0 ) // false
+ * booleanSchema.parse( 0n ) // false
+ * booleanSchema.parse( '' ) // false
+ * booleanSchema.parse( null ) // false
+ * booleanSchema.parse( undefined ) // false
+ * booleanSchema.parse( NaN ) // false
+ * 
+ * // truthy => true
+ * booleanSchema.parse( 'foo' ) // true
+ * booleanSchema.parse( 42 ) // true
+ * booleanSchema.parse( [] ) // true
+ * booleanSchema.parse( {} ) // true
  */
 export function coerce<Schema extends AllowedZodTypes> ( schema: Schema ) {
     return z.any()

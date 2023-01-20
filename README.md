@@ -146,14 +146,40 @@ schemaWithTypedParsers.parse( 'bar' )
 ```
 
 ### coerce
-Treats coercion errors like normal zod errors. Prevents throwing errors when using `safeParse`.
+Coercion that treats errors like normal zod errors. Prevents throwing errors when using `safeParse`.
 ```ts
 import { zu } from 'zod_utilz'
-const schema = zu.coerce( z.bigint() )
-zu.SPR( schema.safeParse( '42' ) ).data
-// 42n
-zu.SPR( schema.safeParse( 'foo' ) ).error?.issues[ 0 ].message
+const bigintSchema = zu.coerce( z.bigint() )
+bigintSchema.parse( '42' ) // 42n
+bigintSchema.parse( '42n' ) // 42n
+zu.SPR( bigintSchema.safeParse( 'foo' ) ).error?.issues[ 0 ].message
 // 'Expected bigint, received string'
+```
+
+```ts
+import { zu } from 'zod_utilz'
+const booleanSchema = zu.coerce( z.boolean() )
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+// only exception to normal boolean coercion rules
+booleanSchema.parse( 'false' ) // false
+
+// https://developer.mozilla.org/en-US/docs/Glossary/Falsy
+// falsy => false
+booleanSchema.parse( false ) // false
+booleanSchema.parse( 0 ) // false
+booleanSchema.parse( -0 ) // false
+booleanSchema.parse( 0n ) // false
+booleanSchema.parse( '' ) // false
+booleanSchema.parse( null ) // false
+booleanSchema.parse( undefined ) // false
+booleanSchema.parse( NaN ) // false
+
+// truthy => true
+booleanSchema.parse( 'foo' ) // true
+booleanSchema.parse( 42 ) // true
+booleanSchema.parse( [] ) // true
+booleanSchema.parse( {} ) // true
 ```
 
 ### useURLSearchParams
@@ -198,10 +224,6 @@ zu.SPR( schema.safeParse(
 Always open to ideas. Positive or negative, all are welcome. Feel free to contribute an [issue](https://github.com/JacobWeisenburger/zod_utilz/issues) or [PR](https://github.com/JacobWeisenburger/zod_utilz/pulls).
 - zu.coerce
     - z.date()
-    - z.array()
-        - recursively coerce items
-        - z.string().array()
-        - z.number().array()
     - z.object()
         - recursively coerce props
         - https://github.com/colinhacks/zod/discussions/1910

@@ -257,29 +257,47 @@ Deno.test( 'coerce( z.boolean().array() )', () => {
     assertEquals( schema.parse( ( arg1: any, arg2: any ) => { } ), [ true ] )
 } )
 
-Deno.test( 'README Example: bigint', () => {
-    const schema = zu.coerce( z.bigint() )
+Deno.test( 'README Example: z.bigint()', () => {
+    const bigintSchema = zu.coerce( z.bigint() )
+    assertEquals( bigintSchema.parse( '42' ), 42n )
+    assertEquals( bigintSchema.parse( '42n' ), 42n )
     assertEquals(
-        zu.SPR( schema.safeParse( '42' ) ).data,
-        42n
-    )
-    assertEquals(
-        zu.SPR( schema.safeParse( 'foo' ) ).error?.issues[ 0 ].message,
+        zu.SPR( bigintSchema.safeParse( 'foo' ) ).error?.issues[ 0 ].message,
         'Expected bigint, received string'
     )
 } )
 
+Deno.test( 'README Example: z.boolean()', () => {
+    const booleanSchema = zu.coerce( z.boolean() )
+
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+    // only exception to normal boolean coercion rules
+    assertEquals( booleanSchema.parse( 'false' ), false )
+
+    // https://developer.mozilla.org/en-US/docs/Glossary/Falsy
+    // falsy => false
+    assertEquals( booleanSchema.parse( false ), false )
+    assertEquals( booleanSchema.parse( 0 ), false )
+    assertEquals( booleanSchema.parse( -0 ), false )
+    assertEquals( booleanSchema.parse( 0n ), false )
+    assertEquals( booleanSchema.parse( '' ), false )
+    assertEquals( booleanSchema.parse( null ), false )
+    assertEquals( booleanSchema.parse( undefined ), false )
+    assertEquals( booleanSchema.parse( NaN ), false )
+
+    // truthy => true
+    assertEquals( booleanSchema.parse( 'foo' ), true )
+    assertEquals( booleanSchema.parse( 42 ), true )
+    assertEquals( booleanSchema.parse( [] ), true )
+    assertEquals( booleanSchema.parse( {} ), true )
+} )
+
 // TODO
-// Deno.test( 'README Example: date', () => {
+// Deno.test( 'README Example: z.date()', () => {
 //     const schema = zu.coerce( z.date() )
 // } )
 
 // TODO
-// Deno.test( 'README Example: object', () => {
+// Deno.test( 'README Example: z.object()', () => {
 //     const schema = zu.coerce( z.object() )
-// } )
-
-// TODO
-// Deno.test( 'README Example: array', () => {
-//     const schema = zu.coerce( z.string().array() )
 // } )
