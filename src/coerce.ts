@@ -31,6 +31,7 @@ type AllowedZodTypes =
  * // 'Expected bigint, received string'
  * 
  * @example
+ * import { zu } from 'zod_utilz'
  * const booleanSchema = zu.coerce( z.boolean() )
  * 
  * // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean
@@ -53,6 +54,21 @@ type AllowedZodTypes =
  * booleanSchema.parse( 42 ) // true
  * booleanSchema.parse( [] ) // true
  * booleanSchema.parse( {} ) // true
+ * 
+ * @example
+ * import { zu } from 'zod_utilz'
+ * const numberArraySchema = zu.coerce( z.number().array() )
+ * 
+ * // if the value is not an array, it is coerced to an array with one coerced item
+ * numberArraySchema.parse( 42 ) // [ 42 ]
+ * numberArraySchema.parse( '42' ) // [ 42 ]
+ * 
+ * // if the value is an array, it coerces each item in the array
+ * numberArraySchema.parse( [] ) // []
+ * numberArraySchema.parse( [ '42', 42 ] ) // [ 42, 42 ]
+ * 
+ * zu.SPR( numberArraySchema.safeParse( 'foo' ) ).error?.issues[ 0 ].message
+ * // 'Expected number, received nan'
  */
 export function coerce<Schema extends AllowedZodTypes> ( schema: Schema ) {
     return z.any()

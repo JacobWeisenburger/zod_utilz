@@ -292,6 +292,23 @@ Deno.test( 'README Example: z.boolean()', () => {
     assertEquals( booleanSchema.parse( {} ), true )
 } )
 
+Deno.test( 'README Example: z.number().array()', () => {
+    const numberArraySchema = zu.coerce( z.number().array() )
+
+    // if the value is not an array, it is coerced to an array with one coerced item
+    assertEquals( numberArraySchema.parse( 42 ), [ 42 ] )
+    assertEquals( numberArraySchema.parse( '42' ), [ 42 ] )
+
+    // if the value is an array, it coerces each item in the array
+    assertEquals( numberArraySchema.parse( [] ), [] )
+    assertEquals( numberArraySchema.parse( [ '42', 42 ] ), [ 42, 42 ] )
+
+    assertEquals(
+        zu.SPR( numberArraySchema.safeParse( 'foo' ) ).error?.issues[ 0 ].message,
+        'Expected number, received nan'
+    )
+} )
+
 // TODO
 // Deno.test( 'README Example: z.date()', () => {
 //     const schema = zu.coerce( z.date() )
