@@ -118,38 +118,87 @@ Deno.test( 'useURLSearchParams sad path', () => {
     )
 } )
 
-Deno.test( 'README Example', () => {
-    const schema = zu.useURLSearchParams(
-        z.object( {
+Deno.test( {
+    name: 'passthrough',
+    fn () {
+        const objSchema = z.object( {
             string: z.string(),
             number: z.number(),
             boolean: z.boolean(),
-        } )
-    )
+        } ).passthrough()
 
-    assertEquals(
-        zu.SPR( schema.safeParse(
-            new URLSearchParams( {
+        const schema = zu.useURLSearchParams( objSchema )
+
+        assertEquals(
+            zu.SPR( schema.safeParse(
+                new URLSearchParams( {
+                    string: 'foo',
+                    number: '42',
+                    boolean: 'false',
+                    extraKey: 'extraValue',
+                } )
+            ) ).data,
+            {
                 string: 'foo',
-                number: '42',
-                boolean: 'false',
-            } )
-        ) ).data,
-        { string: 'foo', number: 42, boolean: false }
-    )
+                number: 42,
+                boolean: false,
+                extraKey: 'extraValue'
+            } as any
+        )
+    }
+} )
 
-    assertEquals(
-        zu.SPR( schema.safeParse(
-            new URLSearchParams( {
-                string: '42',
-                number: 'false',
-                boolean: 'foo',
+Deno.test( {
+    name: 'strict',
+    fn () {
+        const objSchema = z.object( {} ).strict()
+        const schema = zu.useURLSearchParams( objSchema )
+        assertEquals(
+            zu.SPR( schema.safeParse(
+                new URLSearchParams( {
+                    extraKey: 'extraValue',
+                } )
+            ) ).error?.flatten().formErrors,
+            [ "Unrecognized key(s) in object: 'extraKey'" ]
+        )
+    }
+} )
+
+Deno.test( {
+    name: 'README Example',
+    fn () {
+        const schema = zu.useURLSearchParams(
+            z.object( {
+                string: z.string(),
+                number: z.number(),
+                boolean: z.boolean(),
             } )
-        ) ).error?.flatten().fieldErrors,
-        {
-            string: [ 'Expected string, received number' ],
-            number: [ 'Expected number, received boolean' ],
-            boolean: [ 'Expected boolean, received string' ],
-        } as any
-    )
+        )
+
+        assertEquals(
+            zu.SPR( schema.safeParse(
+                new URLSearchParams( {
+                    string: 'foo',
+                    number: '42',
+                    boolean: 'false',
+                } )
+            ) ).data,
+            { string: 'foo', number: 42, boolean: false }
+        )
+
+        assertEquals(
+            zu.SPR( schema.safeParse(
+                new URLSearchParams( {
+                    string: '42',
+                    number: 'false',
+                    boolean: 'foo',
+                } )
+            ) ).error?.flatten().fieldErrors,
+            {
+                string: [ 'Expected string, received number' ],
+                number: [ 'Expected number, received boolean' ],
+                boolean: [ 'Expected boolean, received string' ],
+            } as any
+        )
+    }
 } )

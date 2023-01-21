@@ -37,9 +37,13 @@ import { z } from 'zod'
  * // }
  * ```
  */
-export function useURLSearchParams<Schema extends z.ZodObject<z.ZodRawShape>> ( schema: Schema ) {
+export function useURLSearchParams<
+    Schema extends z.ZodObject<z.ZodRawShape, z.UnknownKeysParam>
+> ( schema: Schema ) {
+    const { unknownKeys } = schema._def
+    const keys = unknownKeys == 'strip' ? Object.keys( schema.shape ) : undefined
     return z.instanceof( URLSearchParams )
-        .transform( searchParamsToValues )
+        .transform( searchParamsToValues( keys ) )
         .pipe( schema )
 }
 
@@ -48,9 +52,10 @@ function safeParseJSON ( string: string ): any {
     catch { return string }
 }
 
-function searchParamsToValues ( searchParams: URLSearchParams ): Record<string, any> {
-    return Array.from( searchParams.keys() ).reduce( ( record, key ) => {
-        const values = searchParams.getAll( key ).map( safeParseJSON )
-        return { ...record, [ key ]: values.length > 1 ? values : values[ 0 ] }
-    }, {} as Record<string, any> )
-}
+const searchParamsToValues = ( keys?: string[] ) =>
+    ( searchParams: URLSearchParams ): Record<string, any> => {
+        return Array.from( keys ?? searchParams.keys() ).reduce( ( record, key ) => {
+            const values = searchParams.getAll( key ).map( safeParseJSON )
+            return { ...record, [ key ]: values.length > 1 ? values : values[ 0 ] }
+        }, {} as Record<string, any> )
+    }
