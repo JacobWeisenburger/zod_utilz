@@ -205,7 +205,6 @@ Deno.test( {
 
 Deno.test( {
     name: 'README Example',
-    only: true,
     fn () {
         const schema = zu.useFormData(
             z.object( {
