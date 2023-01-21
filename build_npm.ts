@@ -17,7 +17,7 @@ await build( {
     },
     package: {
         name: 'zod_utilz',
-        version: '0.5.0',
+        version: '0.5.1',
         author: 'JacobWeisenburger',
         description: 'Framework agnostic utilities for Zod',
         license: 'MIT',
