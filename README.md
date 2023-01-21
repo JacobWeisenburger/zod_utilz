@@ -238,7 +238,7 @@ zu.SPR( schema.safeParse(
 // }
 ```
 
-### FormData
+### useFormData
 A way to parse FormData
 ```ts
 import { zu } from 'zod_utilz'
