@@ -248,18 +248,38 @@ const schema = zu.useFormData(
         number: z.number(),
         boolean: z.boolean(),
         file: z.instanceof( File ),
+        manyStrings: zu.coerce( z.string().array().min( 2 ) ),
+        manyNumbers: zu.coerce( z.number().array().min( 2 ) ),
+        oneStringInArray: zu.coerce( z.string().array().length( 1 ) ),
+        oneNumberInArray: zu.coerce( z.number().array().length( 1 ) ),
     } )
 )
 ```
 ```ts
+const file = new File( [], 'filename.ext' )
 const formData = new FormData()
 formData.append( 'string', 'foo' )
 formData.append( 'number', '42' )
 formData.append( 'boolean', 'false' )
-formData.append( 'file', new File( [], 'filename.ext' ) )
+formData.append( 'file', file )
+formData.append( 'oneStringInArray', 'Leeeeeeeeeroyyyyyyy Jenkiiiiiins!' )
+formData.append( 'oneNumberInArray', '42' )
+formData.append( 'manyStrings', 'hello' )
+formData.append( 'manyStrings', 'world' )
+formData.append( 'manyNumbers', '123' )
+formData.append( 'manyNumbers', '456' )
 
 zu.SPR( schema.safeParse( formData ) ).data,
-// { string: 'foo', number: 42, boolean: false, file: File }
+// {
+//     string: 'foo',
+//     number: 42,
+//     boolean: false,
+//     file,
+//     manyStrings: [ 'hello', 'world' ],
+//     manyNumbers: [ 123, 456 ],
+//     oneStringInArray: [ 'Leeeeeeeeeroyyyyyyy Jenkiiiiiins!' ],
+//     oneNumberInArray: [ 42 ],
+// }
 ```
 ```ts
 const formData = new FormData()
@@ -267,6 +287,11 @@ formData.append( 'string', '42' )
 formData.append( 'number', 'false' )
 formData.append( 'boolean', 'foo' )
 formData.append( 'file', 'filename.ext' )
+formData.append( 'oneStringInArray', 'Leeeeeeeeeroyyyyyyy' )
+formData.append( 'oneStringInArray', 'Jenkiiiiiins!' )
+formData.append( 'oneNumberInArray', 'foo' )
+formData.append( 'manyStrings', '123' )
+formData.append( 'manyNumbers', 'hello' )
 
 zu.SPR( schema.safeParse( formData ) ).error?.flatten().fieldErrors,
 // {
@@ -274,6 +299,13 @@ zu.SPR( schema.safeParse( formData ) ).error?.flatten().fieldErrors,
 //     number: [ 'Expected number, received boolean' ],
 //     boolean: [ 'Expected boolean, received string' ],
 //     file: [ 'Input not instance of File' ],
+//     manyStrings: [ 'Array must contain at least 2 element(s)' ],
+//     manyNumbers: [
+//         'Array must contain at least 2 element(s)',
+//         'Expected number, received nan',
+//     ],
+//     oneStringInArray: [ 'Array must contain exactly 1 element(s)' ],
+//     oneNumberInArray: [ 'Expected number, received nan' ],
 // }
 ```
 

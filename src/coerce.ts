@@ -17,7 +17,7 @@ type AllowedZodTypes =
     | z.ZodBigInt
     // | z.ZodDate // TODO
     | z.ZodArray<z.ZodTypeAny>
-// | z.ZodObject<z.ZodRawShape> // TODO
+    | z.ZodObject<z.ZodRawShape, z.UnknownKeysParam> // TODO
 
 /**
  * Treats coercion errors like normal zod errors. Prevents throwing errors when using `safeParse`.
@@ -83,6 +83,7 @@ function getTransformer<Schema extends AllowedZodTypes> ( schema: Schema ) {
     if ( schema instanceof z.ZodBoolean ) return toBoolean
     if ( schema instanceof z.ZodBigInt ) return toBigInt
     if ( schema instanceof z.ZodArray ) return toArray( schema )
+    if ( schema instanceof z.ZodArray ) return toObject( schema )
 
     throw new Error( `${ schema!.constructor.name } is not supported by zu.coerce` )
 }
@@ -149,4 +150,13 @@ function toArray<Schema extends z.ZodArray<z.ZodTypeAny>> ( schema: Schema ) {
         if ( Array.isArray( value ) ) return value.map( itemTransformer )
         return [ value ].map( itemTransformer )
     }
+}
+
+function toObject<Schema extends z.ZodObject<z.ZodRawShape, z.UnknownKeysParam>>
+    ( schema: Schema ) {
+    // const itemTransformer = getTransformer( schema._def.type )
+    // return ( value: z.input<Schema> ): z.output<Schema>[] => {
+    //     if ( Array.isArray( value ) ) return value.map( itemTransformer )
+    //     return [ value ].map( itemTransformer )
+    // }
 }

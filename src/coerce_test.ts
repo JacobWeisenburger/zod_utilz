@@ -309,12 +309,20 @@ Deno.test( 'README Example: z.number().array()', () => {
     )
 } )
 
+Deno.test( {
+    name: 'README Example: z.object()',
+    only: true,
+    fn () {
+        const schema = zu.coerce( z.object( {
+            number: z.number(),
+            boolean: z.boolean(),
+            numberArray: z.number().array(),
+        } ) )
+    }
+} )
+
 // TODO
 // Deno.test( 'README Example: z.date()', () => {
 //     const schema = zu.coerce( z.date() )
 // } )
 
-// TODO
-// Deno.test( 'README Example: z.object()', () => {
-//     const schema = zu.coerce( z.object() )
-// } )

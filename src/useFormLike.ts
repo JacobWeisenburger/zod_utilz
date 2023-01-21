@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { zu } from "../mod.ts"
 
 function safeParseJSON ( string: string ): any {
     try { return JSON.parse( string ) }
@@ -20,8 +21,14 @@ const useFormLike = ( type: typeof FormData | typeof URLSearchParams ) => <
 > ( schema: Schema ) => {
     const { unknownKeys } = schema._def
     const keys = unknownKeys == 'strip' ? Object.keys( schema.shape ) : undefined
+
+    // console.log(
+    //     Object.values( schema.shape ).map( x => x.constructor.name )
+    // )
+
     return z.instanceof( type )
         .transform( formLikeToRecord( keys ) )
+        // .pipe( zu.coerce( schema ) )
         .pipe( schema )
 }
 
