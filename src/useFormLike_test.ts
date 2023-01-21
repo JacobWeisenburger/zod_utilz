@@ -202,3 +202,50 @@ Deno.test( {
         )
     }
 } )
+
+Deno.test( {
+    name: 'README Example',
+    only: true,
+    fn () {
+        const schema = zu.useFormData(
+            z.object( {
+                string: z.string(),
+                number: z.number(),
+                boolean: z.boolean(),
+                file: z.instanceof( File ),
+            } )
+        )
+
+        {
+            const file = new File( [], 'filename.ext' )
+            const formData = new FormData()
+            formData.append( 'string', 'foo' )
+            formData.append( 'number', '42' )
+            formData.append( 'boolean', 'false' )
+            formData.append( 'file', file )
+
+            assertEquals(
+                zu.SPR( schema.safeParse( formData ) ).data,
+                { string: 'foo', number: 42, boolean: false, file }
+            )
+        }
+
+        {
+            const formData = new FormData()
+            formData.append( 'string', '42' )
+            formData.append( 'number', 'false' )
+            formData.append( 'boolean', 'foo' )
+            formData.append( 'file', 'filename.ext' )
+
+            assertEquals(
+                zu.SPR( schema.safeParse( formData ) ).error?.flatten().fieldErrors,
+                {
+                    string: [ 'Expected string, received number' ],
+                    number: [ 'Expected number, received boolean' ],
+                    boolean: [ 'Expected boolean, received string' ],
+                    file: [ 'Input not instance of File' ],
+                } as any
+            )
+        }
+    }
+} )

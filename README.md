@@ -47,6 +47,7 @@
     - [useTypedParsers](#usetypedparsers)
     - [coerce](#coerce)
     - [useURLSearchParams](#useurlsearchparams)
+    - [useFormData](#useFormData)
 - [TODO](#todo)
 
 ## Purpose
@@ -237,6 +238,45 @@ zu.SPR( schema.safeParse(
 // }
 ```
 
+### FormData
+A way to parse FormData
+```ts
+import { zu } from 'zod_utilz'
+const schema = zu.useFormData(
+    z.object( {
+        string: z.string(),
+        number: z.number(),
+        boolean: z.boolean(),
+        file: z.instanceof( File ),
+    } )
+)
+```
+```ts
+const formData = new FormData()
+formData.append( 'string', 'foo' )
+formData.append( 'number', '42' )
+formData.append( 'boolean', 'false' )
+formData.append( 'file', new File( [], 'filename.ext' ) )
+
+zu.SPR( schema.safeParse( formData ) ).data,
+// { string: 'foo', number: 42, boolean: false, file: File }
+```
+```ts
+const formData = new FormData()
+formData.append( 'string', '42' )
+formData.append( 'number', 'false' )
+formData.append( 'boolean', 'foo' )
+formData.append( 'file', 'filename.ext' )
+
+zu.SPR( schema.safeParse( formData ) ).error?.flatten().fieldErrors,
+// {
+//     string: [ 'Expected string, received number' ],
+//     number: [ 'Expected number, received boolean' ],
+//     boolean: [ 'Expected boolean, received string' ],
+//     file: [ 'Input not instance of File' ],
+// }
+```
+
 ## TODO
 Always open to ideas. Positive or negative, all are welcome. Feel free to contribute an [issue](https://github.com/JacobWeisenburger/zod_utilz/issues) or [PR](https://github.com/JacobWeisenburger/zod_utilz/pulls).
 - zu.coerce
@@ -244,7 +284,6 @@ Always open to ideas. Positive or negative, all are welcome. Feel free to contri
     - z.object()
         - recursively coerce props
         - https://github.com/colinhacks/zod/discussions/1910
-- FormData
 - Partial Safe Parse
     - https://gist.github.com/JacobWeisenburger/d5dbb4d5bcbb287b7661061a78536423
 - BaseType (Recursively get the base type of a Zod type)
@@ -253,6 +292,5 @@ Always open to ideas. Positive or negative, all are welcome. Feel free to contri
   - zu.baseType( z.string().optional().refine() ) => z.string()
   - zu.baseType( z.string().array().optional().refine() ) => z.string().array()
 - Make process for minifying
-- Logo
 - GitHub Actions
     - Auto publish to npm
