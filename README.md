@@ -47,7 +47,7 @@
     - [useTypedParsers](#usetypedparsers)
     - [coerce](#coerce)
     - [useURLSearchParams](#useurlsearchparams)
-    - [useFormData](#useFormData)
+    - [useFormData](#useformdata)
 - [TODO](#todo)
 
 ## Purpose
