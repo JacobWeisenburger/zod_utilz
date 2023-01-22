@@ -284,6 +284,8 @@ Always open to ideas. Positive or negative, all are welcome. Feel free to contri
     - z.object()
         - recursively coerce props
         - https://github.com/colinhacks/zod/discussions/1910
+- enum pick/omit
+    - https://github.com/colinhacks/zod/discussions/1922
 - Partial Safe Parse
     - https://gist.github.com/JacobWeisenburger/d5dbb4d5bcbb287b7661061a78536423
 - BaseType (Recursively get the base type of a Zod type)
