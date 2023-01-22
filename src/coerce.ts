@@ -1,91 +1,102 @@
 import { z } from 'zod'
 
-// https://developer.mozilla.org/en-US/docs/Glossary/Primitive
-// string
-// number
-// bigint
-// boolean
-// undefined
-// symbol
-// null
-
-type AllowedZodTypes =
-    | z.ZodAny
-    | z.ZodString
-    | z.ZodNumber
-    | z.ZodBoolean
-    | z.ZodBigInt
-    // | z.ZodDate // TODO
-    | z.ZodArray<z.ZodTypeAny>
-    | z.ZodObject<z.ZodRawShape, z.UnknownKeysParam> // TODO
-
 /**
- * Treats coercion errors like normal zod errors. Prevents throwing errors when using `safeParse`.
- * 
- * @example
- * import { zu } from 'zod_utilz'
- * const bigintSchema = zu.coerce( z.bigint() )
- * bigintSchema.parse( '42' ) // 42n
- * bigintSchema.parse( '42n' ) // 42n
- * zu.SPR( bigintSchema.safeParse( 'foo' ) ).error?.issues[ 0 ].message
- * // 'Expected bigint, received string'
- * 
- * @example
- * import { zu } from 'zod_utilz'
- * const booleanSchema = zu.coerce( z.boolean() )
- * 
- * // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean
- * // only exception to normal boolean coercion rules
- * booleanSchema.parse( 'false' ) // false
- * 
- * // https://developer.mozilla.org/en-US/docs/Glossary/Falsy
- * // falsy => false
- * booleanSchema.parse( false ) // false
- * booleanSchema.parse( 0 ) // false
- * booleanSchema.parse( -0 ) // false
- * booleanSchema.parse( 0n ) // false
- * booleanSchema.parse( '' ) // false
- * booleanSchema.parse( null ) // false
- * booleanSchema.parse( undefined ) // false
- * booleanSchema.parse( NaN ) // false
- * 
- * // truthy => true
- * booleanSchema.parse( 'foo' ) // true
- * booleanSchema.parse( 42 ) // true
- * booleanSchema.parse( [] ) // true
- * booleanSchema.parse( {} ) // true
- * 
- * @example
- * import { zu } from 'zod_utilz'
- * const numberArraySchema = zu.coerce( z.number().array() )
- * 
- * // if the value is not an array, it is coerced to an array with one coerced item
- * numberArraySchema.parse( 42 ) // [ 42 ]
- * numberArraySchema.parse( '42' ) // [ 42 ]
- * 
- * // if the value is an array, it coerces each item in the array
- * numberArraySchema.parse( [] ) // []
- * numberArraySchema.parse( [ '42', 42 ] ) // [ 42, 42 ]
- * 
- * zu.SPR( numberArraySchema.safeParse( 'foo' ) ).error?.issues[ 0 ].message
- * // 'Expected number, received nan'
- */
-export function coerce<Schema extends AllowedZodTypes> ( schema: Schema ) {
+Treats coercion errors like normal zod errors. Prevents throwing errors when using `safeParse`.
+
+@example
+import { zu } from 'zod_utilz'
+const bigintSchema = zu.coerce( z.bigint() )
+bigintSchema.parse( '42' ) // 42n
+bigintSchema.parse( '42n' ) // 42n
+zu.SPR( bigintSchema.safeParse( 'foo' ) ).error?.issues[ 0 ].message
+// 'Expected bigint, received string'
+
+@example
+import { zu } from 'zod_utilz'
+const booleanSchema = zu.coerce( z.boolean() )
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+// only exception to normal boolean coercion rules
+booleanSchema.parse( 'false' ) // false
+
+// https://developer.mozilla.org/en-US/docs/Glossary/Falsy
+// falsy => false
+booleanSchema.parse( false ) // false
+booleanSchema.parse( 0 ) // false
+booleanSchema.parse( -0 ) // false
+booleanSchema.parse( 0n ) // false
+booleanSchema.parse( '' ) // false
+booleanSchema.parse( null ) // false
+booleanSchema.parse( undefined ) // false
+booleanSchema.parse( NaN ) // false
+
+// truthy => true
+booleanSchema.parse( 'foo' ) // true
+booleanSchema.parse( 42 ) // true
+booleanSchema.parse( [] ) // true
+booleanSchema.parse( {} ) // true
+
+@example
+import { zu } from 'zod_utilz'
+const numberArraySchema = zu.coerce( z.number().array() )
+
+// if the value is not an array, it is coerced to an array with one coerced item
+numberArraySchema.parse( 42 ) // [ 42 ]
+numberArraySchema.parse( '42' ) // [ 42 ]
+
+// if the value is an array, it coerces each item in the array
+numberArraySchema.parse( [] ) // []
+numberArraySchema.parse( [ '42', 42 ] ) // [ 42, 42 ]
+
+zu.SPR( numberArraySchema.safeParse( 'foo' ) ).error?.issues[ 0 ].message
+// 'Expected number, received nan'
+*/
+export function coerce<Schema extends z.ZodTypeAny> ( schema: Schema ) {
     return z.any()
         .transform<z.infer<Schema>>( getTransformer( schema ) )
         .pipe( schema ) as z.ZodPipeline<z.ZodEffects<z.ZodAny, z.infer<Schema>, any>, Schema>
 }
 
-function getTransformer<Schema extends AllowedZodTypes> ( schema: Schema ) {
-    if ( schema instanceof z.ZodAny ) return ( value: any ) => value
+export function getTransformer<Schema extends z.ZodTypeAny> ( schema: Schema ) {
+    if ( schema instanceof z.ZodNull ) return toNull
+    if ( schema instanceof z.ZodLiteral ) return toLiteral( schema._def.value )
     if ( schema instanceof z.ZodString ) return toString
+    if ( schema instanceof z.ZodEnum ) return toString
     if ( schema instanceof z.ZodNumber ) return toNumber
     if ( schema instanceof z.ZodBoolean ) return toBoolean
     if ( schema instanceof z.ZodBigInt ) return toBigInt
+    if ( schema instanceof z.ZodDate ) return toDate
     if ( schema instanceof z.ZodArray ) return toArray( schema )
-    if ( schema instanceof z.ZodArray ) return toObject( schema )
+    if ( schema instanceof z.ZodTuple ) return toTuple( schema as any )
+    if ( schema instanceof z.ZodObject ) return toObject( schema )
 
-    throw new Error( `${ schema!.constructor.name } is not supported by zu.coerce` )
+    if ( schema instanceof z.ZodOptional )
+        return getTransformer( schema._def.innerType )
+
+    return noop
+}
+
+const noop = ( x: any ) => x
+
+/* TODO write tests */
+function toNull ( value: any ) {
+    try {
+        if ( typeof value == 'string' )
+            return JSON.parse( value )
+    } catch { }
+
+    return value
+}
+
+/* TODO write tests */
+const toLiteral = ( defValue: any ) => ( value: any ) => {
+    switch ( typeof defValue ) {
+        case 'number': return toNumber( value )
+        case 'bigint': return toBigInt( value )
+        case 'boolean': return toBoolean( value )
+    }
+
+    return value
 }
 
 function toString ( value: any ): string {
@@ -136,27 +147,78 @@ function toBoolean ( value: any ): boolean {
 
     try {
         return Boolean( JSON.parse( value ) )
-    } catch ( error ) { }
+    } catch { }
     try {
         return Boolean( value )
-    } catch ( error ) { }
+    } catch { }
 
     return false
 }
 
+function toDate ( value: any ): Date {
+    if ( value instanceof Date ) return value
+
+    try {
+        return new Date( value )
+    } catch { }
+
+    return value
+}
+
+/* TODO write tests for JSON array */
 function toArray<Schema extends z.ZodArray<z.ZodTypeAny>> ( schema: Schema ) {
     const itemTransformer = getTransformer( schema._def.type )
     return ( value: z.input<Schema> ): z.output<Schema>[] => {
+        if ( typeof value == 'string' ) {
+            try {
+                value = JSON.parse( value )
+            } catch { }
+        }
+
         if ( Array.isArray( value ) ) return value.map( itemTransformer )
         return [ value ].map( itemTransformer )
     }
 }
 
-function toObject<Schema extends z.ZodObject<z.ZodRawShape, z.UnknownKeysParam>>
-    ( schema: Schema ) {
-    // const itemTransformer = getTransformer( schema._def.type )
-    // return ( value: z.input<Schema> ): z.output<Schema>[] => {
-    //     if ( Array.isArray( value ) ) return value.map( itemTransformer )
-    //     return [ value ].map( itemTransformer )
-    // }
+/* TODO write tests */
+function toTuple<Schema extends z.ZodTuple> ( schema: Schema ) {
+    const itemTransformers = schema._def.items.map( getTransformer )
+    return ( value: z.input<Schema> ): z.output<Schema> => {
+        if ( typeof value == 'string' ) {
+            try {
+                value = JSON.parse( value )
+            } catch { }
+        }
+
+        if ( Array.isArray( value ) )
+            return value.map( ( item, index ) => itemTransformers[ index ]( item ) ) as any
+        return [ value ].map( ( item, index ) => itemTransformers[ index ]( item ) ) as any
+    }
 }
+
+function toObject<
+    Schema extends z.ZodObject<z.ZodRawShape, z.UnknownKeysParam>
+> ( schema: Schema ) {
+    return ( value: z.input<Schema> ): z.output<Schema> => {
+        if ( typeof value == 'string' ) {
+            try {
+                value = JSON.parse( value )
+            } catch { }
+        }
+
+        if ( typeof value !== 'object' ) return value
+
+        const { unknownKeys } = schema._def
+        const keys = unknownKeys == 'strip'
+            ? Object.keys( schema.shape )
+            : Object.keys( value )
+        return Object.fromEntries(
+            keys.map( key => {
+                const propSchema = schema.shape[ key ] ?? z.any()
+                const propTransformer = getTransformer( propSchema )
+                return [ key, propTransformer( value[ key ] ) ]
+            } )
+        )
+    }
+}
+

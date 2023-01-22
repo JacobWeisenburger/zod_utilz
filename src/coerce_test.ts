@@ -257,6 +257,50 @@ Deno.test( 'coerce( z.boolean().array() )', () => {
     assertEquals( schema.parse( ( arg1: any, arg2: any ) => { } ), [ true ] )
 } )
 
+Deno.test( {
+    name: 'coerce( z.object().strip() )',
+    fn () {
+        const schema = zu.coerce(
+            z.object( {} ).strip()
+        )
+
+        assertEquals(
+            schema.parse( { extraKey: 'extraValue' } ),
+            {},
+        )
+    }
+} )
+
+Deno.test( {
+    name: 'coerce( z.object().passthrough() )',
+    fn () {
+        const schema = zu.coerce(
+            z.object( {} ).passthrough()
+        )
+
+        assertEquals(
+            schema.parse( { extraKey: 'extraValue' } ),
+            { extraKey: 'extraValue' },
+        )
+    }
+} )
+
+Deno.test( {
+    name: 'coerce( z.object().strict() )',
+    fn () {
+        const schema = zu.coerce(
+            z.object( {} ).strict()
+        )
+
+        assertEquals(
+            zu.SPR( schema.safeParse( {
+                extraKey: 'extraValue'
+            } ) ).error?.issues[ 0 ].message,
+            `Unrecognized key(s) in object: 'extraKey'`
+        )
+    }
+} )
+
 Deno.test( 'README Example: z.bigint()', () => {
     const bigintSchema = zu.coerce( z.bigint() )
     assertEquals( bigintSchema.parse( '42' ), 42n )
@@ -311,13 +355,32 @@ Deno.test( 'README Example: z.number().array()', () => {
 
 Deno.test( {
     name: 'README Example: z.object()',
-    only: true,
     fn () {
-        const schema = zu.coerce( z.object( {
-            number: z.number(),
-            boolean: z.boolean(),
-            numberArray: z.number().array(),
-        } ) )
+        const schema = zu.coerce(
+            z.object( {
+                boolean: z.boolean(),
+                bigint: z.bigint(),
+                numberArray: z.number().array(),
+            } ),
+        )
+
+        assertEquals(
+            schema.parse( {
+                boolean: 'false',
+                bigint: '42',
+                numberArray: [ '42', 42n ],
+            } ),
+            {
+                boolean: false,
+                bigint: 42n,
+                numberArray: [ 42, 42 ],
+            } as any,
+        )
+
+        assertEquals(
+            zu.SPR( schema.safeParse( 'foo' ) ).error?.issues[ 0 ].message,
+            'Expected object, received string'
+        )
     }
 } )
 

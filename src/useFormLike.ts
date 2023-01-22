@@ -1,35 +1,27 @@
 import { z } from 'zod'
 import { zu } from "../mod.ts"
 
-function safeParseJSON ( string: string ): any {
-    try { return JSON.parse( string ) }
-    catch { return string }
-}
+const formLikeToRecord = <
+    Schema extends z.ZodObject<z.ZodRawShape, z.UnknownKeysParam>
+> ( schema: Schema ) => ( formLike: FormData | URLSearchParams ): Record<string, any> => {
+    const { unknownKeys } = schema._def
+    const keys = unknownKeys == 'strip'
+        ? Object.keys( schema.shape )
+        : formLike.keys()
 
-const formLikeToRecord = ( keys?: string[] ) =>
-    ( formLike: FormData | URLSearchParams ): Record<string, any> => {
-        return Array.from( keys ?? formLike.keys() ).reduce( ( record, key ) => {
-            const values = formLike.getAll( key )
-                .map( x => x instanceof File ? x : safeParseJSON( x ) )
-            record[ key ] = values.length > 1 ? values : values[ 0 ]
-            return record
-        }, {} as Record<string, any> )
-    }
+    return Array.from( keys ).reduce( ( record, key ) => {
+        const values = formLike.getAll( key )
+        record[ key ] = values.length > 1 ? values : values[ 0 ]
+        return record
+    }, {} as Record<string, any> )
+}
 
 const useFormLike = ( type: typeof FormData | typeof URLSearchParams ) => <
     Schema extends z.ZodObject<z.ZodRawShape, z.UnknownKeysParam>
 > ( schema: Schema ) => {
-    const { unknownKeys } = schema._def
-    const keys = unknownKeys == 'strip' ? Object.keys( schema.shape ) : undefined
-
-    // console.log(
-    //     Object.values( schema.shape ).map( x => x.constructor.name )
-    // )
-
     return z.instanceof( type )
-        .transform( formLikeToRecord( keys ) )
-        // .pipe( zu.coerce( schema ) )
-        .pipe( schema )
+        .transform( formLikeToRecord( schema ) )
+        .pipe( zu.coerce( schema ) )
 }
 
 /**
