@@ -326,3 +326,4 @@ Always open to ideas. Positive or negative, all are welcome. Feel free to contri
 - Make process for minifying
 - GitHub Actions
     - Auto publish to npm
+    - https://github.com/colinhacks/zod/blob/master/.github/workflows/release.yml
