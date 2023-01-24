@@ -48,6 +48,7 @@
     - [coerce](#coerce)
     - [useURLSearchParams](#useurlsearchparams)
     - [useFormData](#useformdata)
+    - [partialSafeParse](#partialsafeparse)
 - [TODO](#todo)
 
 ## Purpose
@@ -277,6 +278,23 @@ zu.SPR( schema.safeParse( formData ) ).error?.flatten().fieldErrors,
 // }
 ```
 
+### partialSafeParse
+partialSafeParse allows you to get the valid fields even if there was an error in another field
+```ts
+import { zu } from 'zod_utilz'
+const userSchema = z.object( { name: z.string(), age: z.number() } )
+const result = zu.partialSafeParse( userSchema, { name: null, age: 42 } )
+// {
+//     successType: 'partial',
+//     validData: { age: 42 },
+//     invalidData: { name: null },
+// }
+result.error?.flatten().fieldErrors
+// {
+//     name: [ 'Expected string, received null' ],
+// }
+```
+
 ## TODO
 Always open to ideas. Positive or negative, all are welcome. Feel free to contribute an [issue](https://github.com/JacobWeisenburger/zod_utilz/issues) or [PR](https://github.com/JacobWeisenburger/zod_utilz/pulls).
 - zu.coerce
@@ -286,8 +304,6 @@ Always open to ideas. Positive or negative, all are welcome. Feel free to contri
         - https://github.com/colinhacks/zod/discussions/1910
 - enum pick/omit
     - https://github.com/colinhacks/zod/discussions/1922
-- Partial Safe Parse
-    - https://gist.github.com/JacobWeisenburger/d5dbb4d5bcbb287b7661061a78536423
 - BaseType (Recursively get the base type of a Zod type)
   - zu.baseType( z.string() ) => z.string()
   - zu.baseType( z.string().optional() ) => z.string()
