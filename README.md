@@ -310,5 +310,8 @@ Always open to ideas. Positive or negative, all are welcome. Feel free to contri
   - zu.baseType( z.string().optional().refine() ) => z.string()
   - zu.baseType( z.string().array().optional().refine() ) => z.string().array()
 - Make process for minifying
+- Shrink Bundle Size
+    - tree-shaking deps
+        - lodash
 - GitHub Actions
     - Auto publish to npm
