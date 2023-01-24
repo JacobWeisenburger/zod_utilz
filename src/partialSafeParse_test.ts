@@ -1,54 +1,117 @@
 import { z } from 'zod'
 import { zu } from '../mod.ts'
-import { assertObjectMatch } from 'std/testing/asserts.ts'
-import { partialSafeParse } from './partialSafeParse.ts'
+import { assertEquals, assertObjectMatch } from 'std/testing/asserts.ts'
 
-Deno.test( 'partialSafeParse', () => {
+Deno.test( 'partialSafeParse', async t => {
     const userSchema = z.object( { name: z.string(), age: z.number() } )
 
-    // assertObjectMatch(
-    //     partialSafeParse( userSchema, { name: 'foo', age: 42 } ),
-    //     { success: true, data: { name: 'foo', age: 42 } }
-    // )
+    await t.step( `successType: 'full'`, () => {
+        const result = zu.partialSafeParse( userSchema, { name: 'foo', age: 42 } )
+        assertObjectMatch(
+            result,
+            {
+                successType: 'full',
+                data: { name: 'foo', age: 42 },
+                validData: { name: 'foo', age: 42 },
+                invalidData: {},
+            }
+        )
 
-    // assertObjectMatch(
-    //     partialSafeParse( userSchema, { name: null, age: 42 } ),
-    //     {
-    //         success: 'partial',
-    //         validData: { age: 42 },
-    //         invalidData: { name: null },
-    //         fieldErrors: { name: [ 'Expected string, received null' ] }
-    //     }
-    // )
+        assertEquals(
+            result.error,
+            undefined
+        )
+    } )
 
-    // assertObjectMatch(
-    //     partialSafeParse( userSchema, { name: null } ),
-    //     {
-    //         success: 'partial',
-    //         validData: {},
-    //         invalidData: { name: null },
-    //         fieldErrors: {
-    //             name: [ 'Expected string, received null' ],
-    //             age: [ 'Required' ]
-    //         }
-    //     }
-    // )
+    await t.step( `successType: 'partial': { name: null, age: 42 }`, () => {
+        const result = zu.partialSafeParse( userSchema, { name: null, age: 42 } )
+        assertObjectMatch(
+            result,
+            {
+                successType: 'partial',
+                validData: { age: 42 },
+                invalidData: { name: null },
+            }
+        )
+        assertEquals(
+            result.error?.flatten().fieldErrors ?? {},
+            {
+                name: [ 'Expected string, received null' ],
+            }
+        )
+    } )
 
-    // assertObjectMatch(
-    //     partialSafeParse( userSchema, {} ),
-    //     {
-    //         success: 'partial',
-    //         validData: {},
-    //         invalidData: {},
-    //         fieldErrors: { name: [ 'Required' ], age: [ 'Required' ] }
-    //     }
-    // )
+    await t.step( `successType: 'partial': { name: null }`, () => {
+        const result = zu.partialSafeParse( userSchema, { name: null } )
+        assertObjectMatch(
+            result,
+            {
+                successType: 'partial',
+                validData: {},
+                invalidData: { name: null },
+            }
+        )
+        assertEquals(
+            result.error?.flatten().fieldErrors ?? {},
+            {
+                name: [ 'Expected string, received null' ],
+                age: [ 'Required' ],
+            }
+        )
+    } )
 
-    console.log( partialSafeParse( userSchema, null ). )
-    // console.log( partialSafeParse( userSchema, null ).error?.format()._errors )
+    await t.step( `successType: 'partial': {}`, () => {
+        const result = zu.partialSafeParse( userSchema, {} )
+        assertObjectMatch(
+            result,
+            {
+                successType: 'partial',
+                validData: {},
+                invalidData: {},
+            }
+        )
+        assertEquals(
+            result.error?.flatten().fieldErrors ?? {},
+            {
+                name: [ 'Required' ],
+                age: [ 'Required' ],
+            }
+        )
+    } )
 
-    // assertObjectMatch(
-    //     zu.SPR( partialSafeParse( userSchema, null ) ).error?.format(),
-    //     userSchema.safeParse( null )
-    // )
+    await t.step( `successType: 'none'`, () => {
+        const result = zu.partialSafeParse( userSchema, null )
+        assertObjectMatch(
+            result,
+            {
+                successType: 'none',
+                validData: {},
+                invalidData: {},
+            }
+        )
+        assertEquals(
+            result.error?.flatten().formErrors ?? [],
+            [ 'Expected object, received null' ]
+        )
+    } )
+
+    await t.step( `Readme Example`, () => {
+        const userSchema = z.object( { name: z.string(), age: z.number() } )
+        const result = zu.partialSafeParse( userSchema, { name: null, age: 42 } )
+        assertObjectMatch(
+            result,
+            {
+                successType: 'partial',
+                validData: { age: 42 },
+                invalidData: { name: null },
+            }
+        )
+        assertEquals(
+            result.error?.flatten().fieldErrors ?? {},
+            {
+                name: [ 'Expected string, received null' ],
+            }
+        )
+    } )
+
 } )
