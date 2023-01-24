@@ -138,5 +138,14 @@
     "https://deno.land/x/zod@v3.20.2/locales/en.ts": "ac7210faad6e67ec4f6dbe7062886f04db79ce91ae5ee6c9f64cbdf6221bc80e",
     "https://deno.land/x/zod@v3.20.2/mod.ts": "64e55237cb4410e17d968cd08975566059f27638ebb0b86048031b987ba251c4",
     "https://deno.land/x/zod@v3.20.2/types.ts": "82b5fbb30d1ad0ed4c212002ebf4d43f0b253921c358e205936e6ee2308914d1"
+  },
+  "npm": {
+    "specifiers": { "@type-challenges/utils": "@type-challenges/utils@0.1.1" },
+    "packages": {
+      "@type-challenges/utils@0.1.1": {
+        "integrity": "sha512-A7ljYfBM+FLw+NDyuYvGBJiCEV9c0lPWEAdzfOAkb3JFqfLl0Iv/WhWMMARHiRKlmmiD1g8gz/507yVvHdQUYA==",
+        "dependencies": {}
+      }
+    }
   }
 }

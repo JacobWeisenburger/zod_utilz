@@ -3,21 +3,26 @@ import { build, emptyDir } from 'dnt'
 
 await emptyDir( './npm' )
 
-// https://deno.land/x/zod_utilz/mod.ts
-// https://deno.land/x?query=zod_utilz
-
 await build( {
     entryPoints: [ './mod.ts' ],
     importMap: './import_map.json',
     outDir: './npm',
-    shims: { deno: true },
+    shims: { deno: true, undici: true },
+    mappings: {
+        'https://deno.land/x/zod@v3.20.2/mod.ts': {
+            name: 'zod',
+            version: '^3.20.2',
+            peerDependency: true,
+        }
+    },
     package: {
         name: 'zod_utilz',
-        version: '0.1.3',
+        version: '0.5.2',
         author: 'JacobWeisenburger',
         description: 'Framework agnostic utilities for Zod',
         license: 'MIT',
-        // npm: 'https://www.npmjs.com/package/zod_utilz',
+        npm: 'https://www.npmjs.com/package/zod_utilz',
+        deno: 'https://deno.land/x/zod_utilz',
         repository: 'https://github.com/JacobWeisenburger/zod_utilz',
         homepage: 'https://github.com/JacobWeisenburger/zod_utilz',
     },
