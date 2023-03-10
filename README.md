@@ -321,8 +321,19 @@ result.error?.flatten().fieldErrors
 // }
 ```
 
+### json
+zu.json() is a schema that validates that a JavaScript object is JSON-compatible. This includes `string`, `number`, `boolean`, and `null`, plus `Array`s and `Object`s containing JSON-compatible types as values
+```ts
+import { zu } from 'zod_utilz'
+console.log( zu.json().parse( { some: [ 'json', 'object' ] } ) )
+// { some: [ 'json', 'object' ] }
+```
+
 ## TODO
 Always open to ideas. Positive or negative, all are welcome. Feel free to contribute an [issue](https://github.com/JacobWeisenburger/zod_utilz/issues) or [PR](https://github.com/JacobWeisenburger/zod_utilz/pulls).
+- Shrink Bundle Size
+    - tree-shaking deps
+        - lodash
 - zu.coerce
     - z.date()
     - z.object()
@@ -336,8 +347,5 @@ Always open to ideas. Positive or negative, all are welcome. Feel free to contri
   - zu.baseType( z.string().optional().refine() ) => z.string()
   - zu.baseType( z.string().array().optional().refine() ) => z.string().array()
 - Make process for minifying
-- Shrink Bundle Size
-    - tree-shaking deps
-        - lodash
 - GitHub Actions
     - Auto publish to npm

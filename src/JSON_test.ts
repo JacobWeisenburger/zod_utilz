@@ -1,6 +1,5 @@
-import { z } from 'zod'
 import { zu } from '../mod.ts'
-import { assertEquals, assertThrows, assert } from 'std/testing/asserts.ts'
+import { assertEquals, assertThrows } from 'std/testing/asserts.ts'
 
 Deno.test( 'json', () => {
     const schema = zu.json()
@@ -12,7 +11,7 @@ Deno.test( 'json', () => {
     assertEquals( schema.parse( false ), false )
     assertEquals( schema.parse( null ), null )
 
-    /* disallowed primatives */
+    /* disallowed primitives */
     assertThrows( () => schema.parse( 42n ) )
     assertThrows( () => schema.parse( Symbol( 'symbol' ) ) )
     assertThrows( () => schema.parse( undefined ) )
@@ -21,4 +20,11 @@ Deno.test( 'json', () => {
     /* objects */
     const nested = { one: [ 'two', { three: 4 } ] }
     assertEquals( schema.parse( nested ), nested )
+} )
+
+Deno.test( 'README Example', () => {
+    assertEquals(
+        zu.json().parse( { some: [ 'json', 'object' ] } ),
+        { some: [ 'json', 'object' ] }
+    )
 } )
