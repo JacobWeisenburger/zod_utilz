@@ -23,8 +23,17 @@ Deno.test( 'json', () => {
 } )
 
 Deno.test( 'README Example', () => {
+    const schema = zu.json()
     assertEquals(
-        zu.json().parse( { some: [ 'json', 'object' ] } ),
-        { some: [ 'json', 'object' ] }
+        schema.parse( false ),
+        false
+    )
+    assertEquals(
+        schema.parse( 8675309 ),
+        8675309
+    )
+    assertEquals(
+        schema.parse( { a: 'deeply', nested: [ 'JSON', 'object' ] } ),
+        { a: 'deeply', nested: [ 'JSON', 'object' ] }
     )
 } )

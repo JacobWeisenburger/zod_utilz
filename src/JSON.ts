@@ -26,7 +26,10 @@ Note: `JSON.stringify()` enforces non-circularity, but this can't be easily chec
 
 @example
 import { zu } from 'zod_utilz'
-console.log( zu.json().parse( { some: [ 'json', 'object' ] } ) )
-// { some: [ 'json', 'object' ] }
+const schema = zu.json()
+schema.parse( false ) // false
+schema.parse( 8675309 ) // 8675309
+schema.parse( { a: 'deeply', nested: [ 'JSON', 'object' ] } )
+// { a: 'deeply', nested: [ 'JSON', 'object' ] }
 */
 export const json = () => jsonSchema

@@ -206,30 +206,6 @@ zu.SPR( numberArraySchema.safeParse( 'foo' ) ).error?.issues[ 0 ].message
 // 'Expected number, received nan'
 ```
 
-### JSON
-
-Parse a JSON object literal:
-```ts
-import { zu } from 'zod_utilz'
-const schema = zu.json()
-schema.parse(false) // false
-schema.parse(8675309) // 8675309
-schema.parse({ a: 'deeply', nested: [ 'JSON', 'object' ] })
-// { a: 'deeply', nested: [ 'JSON', 'object' ] }
-```
-
-### jsonString
-
-Parse a JSON string and convert it to JavaScript objects.
-```ts
-import { zu } from 'zod_utilz'
-const scheam = zu.jsonString()
-schema.parse('true') // true
-schema.parse('null') // null
-schema.parse('["one", "two", "three"]') // ['one', 'two', 'three']
-schema.parse('<html>not a JSON string</html>') // throws
-```
-
 ### useURLSearchParams
 A way to parse URLSearchParams
 ```ts
@@ -325,9 +301,23 @@ result.error?.flatten().fieldErrors
 zu.json() is a schema that validates that a JavaScript object is JSON-compatible. This includes `string`, `number`, `boolean`, and `null`, plus `Array`s and `Object`s containing JSON-compatible types as values
 ```ts
 import { zu } from 'zod_utilz'
-console.log( zu.json().parse( { some: [ 'json', 'object' ] } ) )
-// { some: [ 'json', 'object' ] }
+const schema = zu.json()
+schema.parse( false ) // false
+schema.parse( 8675309 ) // 8675309
+schema.parse( { a: 'deeply', nested: [ 'JSON', 'object' ] } )
+// { a: 'deeply', nested: [ 'JSON', 'object' ] }
 ```
+
+<!-- ### jsonString
+Parse a JSON string and convert it to JavaScript objects.
+```ts
+import { zu } from 'zod_utilz'
+const scheam = zu.jsonString()
+schema.parse('true') // true
+schema.parse('null') // null
+schema.parse('["one", "two", "three"]') // ['one', 'two', 'three']
+schema.parse('<html>not a JSON string</html>') // throws
+``` -->
 
 ## TODO
 Always open to ideas. Positive or negative, all are welcome. Feel free to contribute an [issue](https://github.com/JacobWeisenburger/zod_utilz/issues) or [PR](https://github.com/JacobWeisenburger/zod_utilz/pulls).
