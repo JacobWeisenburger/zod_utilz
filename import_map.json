@@ -2,7 +2,7 @@
     "imports": {
         "@type-challenges/utils": "npm:@type-challenges/utils",
         "tsd": "npm:tsd@0.25.0",
-        "zod": "https://deno.land/x/zod@v3.20.2/mod.ts",
+        "zod": "https://deno.land/x/zod@v3.21.4/mod.ts",
         "lodash": "https://cdn.skypack.dev/lodash?dts",
         "dnt": "https://deno.land/x/dnt@0.33.0/mod.ts",
         "std/": "https://deno.land/std@0.167.0/",

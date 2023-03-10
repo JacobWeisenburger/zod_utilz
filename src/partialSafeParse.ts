@@ -19,7 +19,7 @@ result.error?.flatten().fieldErrors
 //     name: [ 'Expected string, received null' ],
 // }
 */
-export function partialSafeParse<Schema extends z.ZodObject<any>> (
+export function partialSafeParse<Schema extends z.AnyZodObject> (
     schema: Schema, input: unknown
 ): ReturnType<typeof zu.SPR> & {
     successType: 'full' | 'partial' | 'none',

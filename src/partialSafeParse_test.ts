@@ -95,6 +95,33 @@ Deno.test( 'partialSafeParse', async t => {
         )
     } )
 
+    // await t.step( `with useURLSearchParams`, () => {
+    //     const params = new URLSearchParams( 'foo=foo&bar=42' )
+    //     const schema = zu.useURLSearchParams(
+    //         z.object( { foo: z.string(), bar: z.string() } )
+    //     )
+    //     // const schema: z.ZodPipeline<z.ZodEffects<z.ZodType<FormData | URLSearchParams, z.ZodTypeDef, FormData | URLSearchParams>, Record<string, any>, FormData | URLSearchParams>, z.ZodObject<...>>
+
+
+    //     //@ts-ignore
+    //     const result = zu.partialSafeParse( schema, params )
+    //     console.log( result )
+    //     // assertObjectMatch(
+    //     //     result,
+    //     //     {
+    //     //         successType: 'partial',
+    //     //         validData: { age: 42 },
+    //     //         invalidData: { name: null },
+    //     //     }
+    //     // )
+    //     // assertEquals(
+    //     //     result.error?.flatten().fieldErrors ?? {},
+    //     //     {
+    //     //         name: [ 'Expected string, received null' ],
+    //     //     }
+    //     // )
+    // } )
+
     await t.step( `Readme Example`, () => {
         const userSchema = z.object( { name: z.string(), age: z.number() } )
         const result = zu.partialSafeParse( userSchema, { name: null, age: 42 } )
