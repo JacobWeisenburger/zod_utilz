@@ -46,6 +46,8 @@
     - [makeErrorMap](#makeerrormap)
     - [useTypedParsers](#usetypedparsers)
     - [coerce](#coerce)
+    - [JSON](#JSON)
+    - [jsonString](#jsonString)
     - [useURLSearchParams](#useurlsearchparams)
     - [useFormData](#useformdata)
     - [partialSafeParse](#partialsafeparse)
@@ -202,6 +204,30 @@ numberArraySchema.parse( [ '42', 42 ] ) // [ 42, 42 ]
 
 zu.SPR( numberArraySchema.safeParse( 'foo' ) ).error?.issues[ 0 ].message
 // 'Expected number, received nan'
+```
+
+### JSON
+
+Parse a JSON object literal:
+```ts
+import { zu } from 'zod_utilz'
+const schema = zu.json()
+schema.parse(false) // false
+schema.parse(8675309) // 8675309
+schema.parse({ a: 'deeply', nested: [ 'JSON', 'object' ] })
+// { a: 'deeply', nested: [ 'JSON', 'object' ] }
+```
+
+### jsonString
+
+Parse a JSON string and convert it to JavaScript objects.
+```ts
+import { zu } from 'zod_utilz'
+const scheam = zu.jsonString()
+schema.parse('true') // true
+schema.parse('null') // null
+schema.parse('["one", "two", "three"]') // ['one', 'two', 'three']
+schema.parse('<html>not a JSON string</html>') // throws
 ```
 
 ### useURLSearchParams
