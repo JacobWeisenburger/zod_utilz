@@ -6,7 +6,7 @@ await emptyDir( './npm' )
 await build( {
     package: {
         name: 'zod_utilz',
-        version: '0.7.0',
+        version: '0.7.1',
         author: 'JacobWeisenburger',
         description: 'Framework agnostic utilities for Zod',
         license: 'MIT',
@@ -15,10 +15,13 @@ await build( {
         repository: 'https://github.com/JacobWeisenburger/zod_utilz',
         homepage: 'https://github.com/JacobWeisenburger/zod_utilz',
     },
+    typeCheck: false,
+    test: false,
+    skipSourceOutput: true,
     entryPoints: [ './mod.ts' ],
     importMap: './import_map.json',
     outDir: './npm',
-    shims: { deno: true, undici: true },
+    shims: { undici: true },
     mappings: {
         'https://deno.land/x/zod@v3.21.4/mod.ts': {
             name: 'zod',

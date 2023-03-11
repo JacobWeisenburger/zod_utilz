@@ -1,6 +1,8 @@
 import { z } from 'zod'
-import { mapValues, omit, pick } from 'lodash'
 import { zu } from '../mod.ts'
+import { mapValues } from './lib/mapValues.ts'
+import { pick } from './lib/pick.ts'
+import { omit } from './lib/omit.ts'
 
 /**
 partialSafeParse allows you to get the valid fields even if there was an error in another field
@@ -45,11 +47,11 @@ export function partialSafeParse<Schema extends z.AnyZodObject> (
     const inputObj = input as z.infer<Schema>
     const keysWithInvalidData = Object.keys( fieldErrors ?? {} )
     const validInput = omit( inputObj, keysWithInvalidData )
-    const invalidData = pick( inputObj, keysWithInvalidData )
+    const invalidData = pick( inputObj, keysWithInvalidData ) as Partial<z.infer<Schema>>
 
     const validData = schema
-        .omit( mapValues( fieldErrors, () => true as const ) )
-        .parse( validInput )
+        .omit( mapValues( () => true )( fieldErrors ) )
+        .parse( validInput ) as Partial<z.infer<Schema>>
 
     return {
         ...result,
