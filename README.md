@@ -49,6 +49,8 @@
     - [useURLSearchParams](#useurlsearchparams)
     - [useFormData](#useformdata)
     - [partialSafeParse](#partialsafeparse)
+    - [json](#json)
+    - [stringToJSON](#stringtojson)
 - [TODO](#todo)
 
 ## Purpose
@@ -290,13 +292,36 @@ const result = zu.partialSafeParse( userSchema, { name: null, age: 42 } )
 //     invalidData: { name: null },
 // }
 result.error?.flatten().fieldErrors
-// {
-//     name: [ 'Expected string, received null' ],
-// }
+// { name: [ 'Expected string, received null' ] }
+```
+
+### json
+zu.json() is a schema that validates that a JavaScript object is JSON-compatible. This includes `string`, `number`, `boolean`, and `null`, plus `Array`s and `Object`s containing JSON-compatible types as values
+```ts
+import { zu } from 'zod_utilz'
+const schema = zu.json()
+schema.parse( false ) // false
+schema.parse( 8675309 ) // 8675309
+schema.parse( { a: 'deeply', nested: [ 'JSON', 'object' ] } )
+// { a: 'deeply', nested: [ 'JSON', 'object' ] }
+```
+
+### stringToJSON
+zu.stringToJSON() is a schema that validates JSON encoded as a string, then returns the parsed value
+```ts
+import { zu } from 'zod_utilz'
+const schema = zu.stringToJSON()
+schema.parse( 'true' ) // true
+schema.parse( 'null' ) // null
+schema.parse( '["one", "two", "three"]' ) // ['one', 'two', 'three']
+schema.parse( '<html>not a JSON string</html>' ) // throws
 ```
 
 ## TODO
 Always open to ideas. Positive or negative, all are welcome. Feel free to contribute an [issue](https://github.com/JacobWeisenburger/zod_utilz/issues) or [PR](https://github.com/JacobWeisenburger/zod_utilz/pulls).
+- Shrink Bundle Size
+    - tree-shaking deps
+        - lodash
 - zu.coerce
     - z.date()
     - z.object()
@@ -310,8 +335,5 @@ Always open to ideas. Positive or negative, all are welcome. Feel free to contri
   - zu.baseType( z.string().optional().refine() ) => z.string()
   - zu.baseType( z.string().array().optional().refine() ) => z.string().array()
 - Make process for minifying
-- Shrink Bundle Size
-    - tree-shaking deps
-        - lodash
 - GitHub Actions
     - Auto publish to npm
