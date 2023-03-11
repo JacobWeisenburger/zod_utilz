@@ -319,6 +319,7 @@ schema.parse( '<html>not a JSON string</html>' ) // throws
 
 ## TODO
 Always open to ideas. Positive or negative, all are welcome. Feel free to contribute an [issue](https://github.com/JacobWeisenburger/zod_utilz/issues) or [PR](https://github.com/JacobWeisenburger/zod_utilz/pulls).
+- tests for `lib/mapValues`
 - Shrink Bundle Size
     - tree-shaking deps
         - lodash
