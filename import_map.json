@@ -1,11 +1,8 @@
 {
     "imports": {
         "@type-challenges/utils": "npm:@type-challenges/utils",
-        "tsd": "npm:tsd@0.25.0",
         "zod": "https://deno.land/x/zod@v3.21.4/mod.ts",
         "dnt": "https://deno.land/x/dnt@0.33.0/mod.ts",
-        "std/": "https://deno.land/std@0.167.0/",
-        "path": "https://deno.land/std@0.150.0/path/mod.ts",
-        "fs": "https://deno.land/std@0.150.0/fs/mod.ts"
+        "std/": "https://deno.land/std@0.179.0/"
     }
 }
