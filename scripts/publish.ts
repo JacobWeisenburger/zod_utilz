@@ -15,38 +15,34 @@ const dist = Path.join( root, 'dist' )
 const tempSubDir = root.split( 'software' )[ 1 ]
 const publishFromDir = Path.join( '/mnt/c/software/temp', tempSubDir, 'dist' )
 
-console.log( tempSubDir )
-console.log( publishFromDir )
+await Promise.resolve()
+    .then( () => console.log( 'Publishing...' ) )
 
+    .then( async () => {
+        await rm( publishFromDir, { recursive: true } )
+            .then( () => console.log( 'publishFromDir: deleted' ) )
+            .catch( logError( { publishFromDir } ) )
+    } )
 
-// await Promise.resolve()
-//     .then( () => console.log( 'Publishing...' ) )
+    .then( async () => {
+        const section = 'publishFromDir: moved all files'
+        await cp( dist, publishFromDir, { recursive: true } )
+            .then( () => console.log( section ) )
+            .catch( logError( { section, dist, publishFromDir } ) )
+    } )
 
-//     .then( async () => {
-//         await rm( publishFromDir, { recursive: true } )
-//             .then( () => console.log( 'publishFromDir: deleted' ) )
-//             .catch( logError( { publishFromDir } ) )
-//     } )
+    .then( async () => {
+        const section = 'npm publish'
+        await $`cd ${ publishFromDir } && npm publish --access public`
+            .then( () => console.log( 'npm publish: ran' ) )
+            .catch( logError( { section } ) )
+    } )
 
-//     .then( async () => {
-//         const section = 'publishFromDir: moved all files'
-//         await cp( dist, publishFromDir, { recursive: true } )
-//             .then( () => console.log( section ) )
-//             .catch( logError( { section, dist, publishFromDir } ) )
-//     } )
+    .then( async () => {
+        await rm( publishFromDir, { recursive: true } )
+            .then( () => console.log( 'publishFromDir: deleted' ) )
+            .catch( logError( { publishFromDir } ) )
+    } )
 
-//     .then( async () => {
-//         const section = 'npm publish'
-//         await $`cd ${ publishFromDir } && npm publish --access public`
-//             .then( () => console.log( 'npm publish: ran' ) )
-//             .catch( logError( { section } ) )
-//     } )
-
-//     .then( async () => {
-//         await rm( publishFromDir, { recursive: true } )
-//             .then( () => console.log( 'publishFromDir: deleted' ) )
-//             .catch( logError( { publishFromDir } ) )
-//     } )
-
-//     .then( () => console.log( 'Publish: done' ) )
-//     .catch( logError( { path: import.meta.path } ) )
+    .then( () => console.log( 'Publish: done' ) )
+    .catch( logError( { path: import.meta.path } ) )

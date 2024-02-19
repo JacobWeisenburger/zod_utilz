@@ -58,7 +58,6 @@ await Promise.resolve()
         const config: BuildConfig = {
             entrypoints: [ './src/index.ts' ],
             format: 'esm',
-            minify: true,
             sourcemap: 'inline',
             target: 'node',
             plugins: [
