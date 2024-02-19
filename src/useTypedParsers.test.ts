@@ -1,9 +1,9 @@
-import { z } from 'zod'
-import { zu } from '../mod.ts'
-import { assertEquals, assertThrows } from 'std/testing/asserts.ts'
 import { Equal, Expect, NotEqual } from '@type-challenges/utils'
+import { expect, test } from 'bun:test'
+import { z } from 'zod'
+import { zu } from '.'
 
-Deno.test( 'useTypedParsers type tests', () => {
+test( 'useTypedParsers type tests', () => {
     const schemaWithTypedParse = zu.useTypedParsers( z.object( {
         foo: z.literal( 'foo' ),
     } ) )
@@ -43,19 +43,16 @@ Deno.test( 'useTypedParsers type tests', () => {
     >>
 } )
 
-Deno.test( 'README Example', () => {
+test( 'README Example', () => {
     const schemaWithTypedParsers = zu.useTypedParsers( z.literal( 'foo' ) )
 
-    assertEquals(
-        schemaWithTypedParsers.parse( 'foo' ),
-        // no ts errors
-        'foo'
-    )
+    // no ts errors
+    expect( schemaWithTypedParsers.parse( 'foo' ) ).toBe( 'foo' )
 
-    assertThrows( () =>
+    expect( () =>
         // @ts-expect-error
         schemaWithTypedParsers.parse( 'bar' )
         //                            ^^^^^
         // Argument of type '"bar"' is not assignable to parameter of type '"foo"'
-    )
+    ).toThrow()
 } )

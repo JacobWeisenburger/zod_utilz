@@ -1,0 +1,32 @@
+{
+    "compilerOptions": {
+        "lib": [
+            "ESNext",
+            "dom",
+            "dom.iterable",
+            "esnext"
+        ],
+        "target": "ESNext",
+        "module": "ESNext",
+        "moduleDetection": "force",
+        "jsx": "react-jsx",
+        "allowJs": true,
+        "moduleResolution": "bundler",
+        "allowImportingTsExtensions": true,
+        "noEmit": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "noFallthroughCasesInSwitch": true,
+        "forceConsistentCasingInFileNames": true,
+        "composite": true,
+        "downlevelIteration": true,
+        "allowSyntheticDefaultImports": true,
+        "types": [
+            "bun-types"
+        ],
+    },
+    "include": [
+        "./src/**/*",
+        "package.json"
+    ]
+}

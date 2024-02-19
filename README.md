@@ -9,18 +9,13 @@
     </h3>
 </div>
 
-<br>
-
 <div align='center'>
     <a href='https://github.com/JacobWeisenburger' rel='nofollow'>
         <img alt='Created by Jacob Weisenburger'
             src='https://img.shields.io/badge/created%20by-Jacob%20Weisenburger-274D82.svg'>
     </a>
     <a href='https://github.com/JacobWeisenburger/zod_utilz/stargazers' rel='nofollow'>
-        <img alt='stars' src='https://img.shields.io/github/stars/JacobWeisenburger/zod_utilz?color=blue'>
-    </a>
-    <a href='https://www.npmjs.com/package/zod_utilz' rel='nofollow'>
-        <img alt='downloads' src='https://img.shields.io/npm/dw/zod_utilz?color=blue'>
+        <img alt='stars' src='https://img.shields.io/github/stars/weis-guys/result?color=blue'>
     </a>
 </div>
 
@@ -28,10 +23,22 @@
     <a href='https://www.npmjs.com/package/zod_utilz' rel='nofollow'>
         <img alt='npm' src='https://img.shields.io/npm/v/zod_utilz?color=blue'>
     </a>
-    <a href='https://deno.land/x/zod_utilz' rel='nofollow'>
-        <img alt='deno' src='https://shield.deno.dev/x/zod_utilz'>
+    <a href='https://www.npmjs.com/package/zod_utilz' rel='nofollow'>
+        <img alt='downloads' src='https://img.shields.io/npm/dw/zod_utilz?color=blue'>
     </a>
 </div>
+
+<div align="center">
+    <a href="https://github.com/JacobWeisenburger/zod_utilz#zod-utilz">Docs</a>
+    <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
+    <a href="https://github.com/JacobWeisenburger/zod_utilz">github</a>
+    <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
+    <a href="https://www.npmjs.com/package/zod_utilz">npm</a>
+</div>
+
+<!-- Dist Readme Stops Here -->
+
+<br />
 
 ## Table of contents
 - [Purpose](#purpose)
@@ -86,8 +93,6 @@ import { zu } from 'zod_utilz'
 
 #### [Deno](https://deno.land/x/zod_utilz)
 ```ts
-import { zu } from 'https://deno.land/x/zod_utilz/mod.ts'
-// or
 import { zu } from 'npm:zod_utilz'
 ```
 

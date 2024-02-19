@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import { zu } from '../mod.ts'
 
 /**
  * SPR stands for SafeParseResult

@@ -1,8 +1,8 @@
 import { z } from 'zod'
-import { zu } from '../mod.ts'
-import { mapValues } from './lib/mapValues.ts'
-import { pick } from './lib/pick.ts'
-import { omit } from './lib/omit.ts'
+import { zu } from '.'
+import { mapValues } from './lib/mapValues'
+import { pick } from './lib/pick'
+import { omit } from './lib/omit'
 
 /**
 partialSafeParse allows you to get the valid fields even if there was an error in another field

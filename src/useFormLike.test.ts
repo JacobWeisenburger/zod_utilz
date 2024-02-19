@@ -1,6 +1,6 @@
+import { expect, test } from 'bun:test'
 import { z } from 'zod'
-import { zu } from '../mod.ts'
-import { assertEquals } from 'std/testing/asserts.ts'
+import { zu } from '.'
 
 const schema = z.object( {
     manyStrings: zu.coerce( z.string().array().min( 1 ) ),
@@ -28,7 +28,7 @@ const schema = z.object( {
 
 const searchParamsSchema = zu.useURLSearchParams( schema )
 
-Deno.test( 'useURLSearchParams happy path', () => {
+test( 'useURLSearchParams happy path', () => {
 
     const searchParams = new URLSearchParams( {
         oneStringInArray: 'Leeeeeeeeeroyyyyyyy Jenkiiiiiins!',
@@ -53,7 +53,7 @@ Deno.test( 'useURLSearchParams happy path', () => {
 
     const result = zu.SPR( searchParamsSchema.safeParse( searchParams ) )
 
-    assertEquals( result.data, {
+    expect( result.data ).toMatchObject( {
         manyStrings: [ 'hello', 'world' ],
         manyNumbers: [ 123, 456 ],
         oneStringInArray: [ 'Leeeeeeeeeroyyyyyyy Jenkiiiiiins!' ],
@@ -72,7 +72,7 @@ Deno.test( 'useURLSearchParams happy path', () => {
     } )
 } )
 
-Deno.test( 'useURLSearchParams sad path', () => {
+test( 'useURLSearchParams sad path', () => {
 
     const searchParams = new URLSearchParams( {
         manyStrings: 'hello',
@@ -96,8 +96,7 @@ Deno.test( 'useURLSearchParams sad path', () => {
 
     const result = zu.SPR( searchParamsSchema.safeParse( searchParams ) )
 
-    assertEquals(
-        result.error?.flatten(),
+    expect( result.error?.flatten() ).toMatchObject(
         {
             formErrors: [],
             fieldErrors: {
@@ -118,133 +117,128 @@ Deno.test( 'useURLSearchParams sad path', () => {
     )
 } )
 
-Deno.test( {
-    name: 'passthrough',
-    fn () {
-        const objSchema = z.object( {
+test( 'passthrough', () => {
+    const objSchema = z.object( {
+        string: z.string(),
+        number: z.number(),
+        boolean: z.boolean(),
+    } ).passthrough()
+
+    const schema = zu.useURLSearchParams( objSchema )
+
+    expect(
+        zu.SPR( schema.safeParse(
+            new URLSearchParams( {
+                string: 'foo',
+                number: '42',
+                boolean: 'false',
+                extraKey: 'extraValue',
+            } )
+        ) ).data
+    ).toMatchObject(
+        {
+            string: 'foo',
+            number: 42,
+            boolean: false,
+            extraKey: 'extraValue'
+        } as any
+    )
+} )
+
+test( 'strict', () => {
+    const objSchema = z.object( {} ).strict()
+    const schema = zu.useURLSearchParams( objSchema )
+    expect(
+        zu.SPR( schema.safeParse(
+            new URLSearchParams( {
+                extraKey: 'extraValue',
+            } )
+        ) ).error?.flatten().formErrors
+    ).toMatchObject(
+        [ "Unrecognized key(s) in object: 'extraKey'" ]
+    )
+}
+)
+
+test( 'README Example', () => {
+    const schema = zu.useURLSearchParams(
+        z.object( {
             string: z.string(),
             number: z.number(),
             boolean: z.boolean(),
-        } ).passthrough()
+        } )
+    )
 
-        const schema = zu.useURLSearchParams( objSchema )
-
-        assertEquals(
-            zu.SPR( schema.safeParse(
-                new URLSearchParams( {
-                    string: 'foo',
-                    number: '42',
-                    boolean: 'false',
-                    extraKey: 'extraValue',
-                } )
-            ) ).data,
-            {
+    expect(
+        zu.SPR( schema.safeParse(
+            new URLSearchParams( {
                 string: 'foo',
-                number: 42,
-                boolean: false,
-                extraKey: 'extraValue'
-            } as any
-        )
-    }
-} )
-
-Deno.test( {
-    name: 'strict',
-    fn () {
-        const objSchema = z.object( {} ).strict()
-        const schema = zu.useURLSearchParams( objSchema )
-        assertEquals(
-            zu.SPR( schema.safeParse(
-                new URLSearchParams( {
-                    extraKey: 'extraValue',
-                } )
-            ) ).error?.flatten().formErrors,
-            [ "Unrecognized key(s) in object: 'extraKey'" ]
-        )
-    }
-} )
-
-Deno.test( {
-    name: 'README Example',
-    fn () {
-        const schema = zu.useURLSearchParams(
-            z.object( {
-                string: z.string(),
-                number: z.number(),
-                boolean: z.boolean(),
+                number: '42',
+                boolean: 'false',
             } )
-        )
+        ) ).data
+    ).toMatchObject(
+        { string: 'foo', number: 42, boolean: false }
+    )
 
-        assertEquals(
-            zu.SPR( schema.safeParse(
-                new URLSearchParams( {
-                    string: 'foo',
-                    number: '42',
-                    boolean: 'false',
-                } )
-            ) ).data,
-            { string: 'foo', number: 42, boolean: false }
-        )
+    expect(
+        zu.SPR( schema.safeParse(
+            new URLSearchParams( {
+                string: '42',
+                number: 'false',
+                boolean: 'foo',
+            } )
+        ) ).error?.flatten().fieldErrors
+    ).toMatchObject(
+        {
+            string: [ 'Expected string, received number' ],
+            number: [ 'Expected number, received boolean' ],
+            boolean: [ 'Expected boolean, received string' ],
+        } as any
+    )
+} )
 
-        assertEquals(
-            zu.SPR( schema.safeParse(
-                new URLSearchParams( {
-                    string: '42',
-                    number: 'false',
-                    boolean: 'foo',
-                } )
-            ) ).error?.flatten().fieldErrors,
+test( 'README Example', () => {
+    const schema = zu.useFormData(
+        z.object( {
+            string: z.string(),
+            number: z.number(),
+            boolean: z.boolean(),
+            file: z.instanceof( File ),
+        } )
+    )
+
+    {
+        const file = new File( [], 'filename.ext' )
+        const formData = new FormData()
+        formData.append( 'string', 'foo' )
+        formData.append( 'number', '42' )
+        formData.append( 'boolean', 'false' )
+        formData.append( 'file', file )
+
+        expect(
+            zu.SPR( schema.safeParse( formData ) ).data
+        ).toMatchObject(
+            { string: 'foo', number: 42, boolean: false, file }
+        )
+    }
+
+    {
+        const formData = new FormData()
+        formData.append( 'string', '42' )
+        formData.append( 'number', 'false' )
+        formData.append( 'boolean', 'foo' )
+        formData.append( 'file', 'filename.ext' )
+
+        expect(
+            zu.SPR( schema.safeParse( formData ) ).error?.flatten().fieldErrors
+        ).toMatchObject(
             {
                 string: [ 'Expected string, received number' ],
                 number: [ 'Expected number, received boolean' ],
                 boolean: [ 'Expected boolean, received string' ],
+                file: [ 'Input not instance of File' ],
             } as any
         )
-    }
-} )
-
-Deno.test( {
-    name: 'README Example',
-    fn () {
-        const schema = zu.useFormData(
-            z.object( {
-                string: z.string(),
-                number: z.number(),
-                boolean: z.boolean(),
-                file: z.instanceof( File ),
-            } )
-        )
-
-        {
-            const file = new File( [], 'filename.ext' )
-            const formData = new FormData()
-            formData.append( 'string', 'foo' )
-            formData.append( 'number', '42' )
-            formData.append( 'boolean', 'false' )
-            formData.append( 'file', file )
-
-            assertEquals(
-                zu.SPR( schema.safeParse( formData ) ).data,
-                { string: 'foo', number: 42, boolean: false, file }
-            )
-        }
-
-        {
-            const formData = new FormData()
-            formData.append( 'string', '42' )
-            formData.append( 'number', 'false' )
-            formData.append( 'boolean', 'foo' )
-            formData.append( 'file', 'filename.ext' )
-
-            assertEquals(
-                zu.SPR( schema.safeParse( formData ) ).error?.flatten().fieldErrors,
-                {
-                    string: [ 'Expected string, received number' ],
-                    number: [ 'Expected number, received boolean' ],
-                    boolean: [ 'Expected boolean, received string' ],
-                    file: [ 'Input not instance of File' ],
-                } as any
-            )
-        }
     }
 } )

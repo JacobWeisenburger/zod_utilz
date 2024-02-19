@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import type { json } from './json.ts'
+import type { json } from './json'
 
 const stringToJSONSchema = z.string()
     .transform( ( str, ctx ): z.infer<ReturnType<typeof json>> => {
