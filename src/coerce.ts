@@ -77,12 +77,13 @@ export function coerce<Schema extends AllowedZodTypes> ( schema: Schema ) {
 }
 
 function getTransformer<Schema extends AllowedZodTypes> ( schema: Schema ) {
-    if ( schema instanceof z.ZodAny ) return ( value: any ) => value
-    if ( schema instanceof z.ZodString ) return toString
-    if ( schema instanceof z.ZodNumber ) return toNumber
-    if ( schema instanceof z.ZodBoolean ) return toBoolean
-    if ( schema instanceof z.ZodBigInt ) return toBigInt
-    if ( schema instanceof z.ZodArray ) return toArray( schema )
+    if ( schema._def.typeName === 'ZodAny' ) return ( value: any ) => value
+    if ( schema._def.typeName === 'ZodString' ) return toString
+    if ( schema._def.typeName === 'ZodNumber' ) return toNumber
+    if ( schema._def.typeName === 'ZodBoolean' ) return toBoolean
+
+    if ( schema._def.typeName === 'ZodBigInt' ) return toBigInt
+    if ( schema._def.typeName === 'ZodArray' ) return toArray( schema as z.ZodArray<any> )
 
     throw new Error( `${ schema!.constructor.name } is not supported by zu.coerce` )
 }
