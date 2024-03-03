@@ -1,12 +1,13 @@
 {
     "name": "zod_utilz",
-    "version": "0.8.0",
+    "version": "0.8.1",
     "author": "JacobWeisenburger",
     "description": "Framework agnostic utilities for Zod",
     "license": "MIT",
     "npm": "https://www.npmjs.com/package/zod_utilz",
     "repository": "https://github.com/JacobWeisenburger/zod_utilz",
     "homepage": "https://github.com/JacobWeisenburger/zod_utilz",
+    "main": "index.js",
     "module": "index.ts",
     "type": "module",
     "keywords": [
