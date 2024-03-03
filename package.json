@@ -1,21 +1,19 @@
 {
     "name": "zod_utilz",
-    "version": "0.8.1",
+    "version": "0.8.2",
     "author": "JacobWeisenburger",
     "description": "Framework agnostic utilities for Zod",
     "license": "MIT",
     "npm": "https://www.npmjs.com/package/zod_utilz",
     "repository": "https://github.com/JacobWeisenburger/zod_utilz",
     "homepage": "https://github.com/JacobWeisenburger/zod_utilz",
-    "main": "index.js",
-    "module": "index.ts",
+    "module": "index.js",
     "type": "module",
     "keywords": [
         "typescript"
     ],
     "scripts": {
         "test": "clear && bun test --watch",
-        "examples": "clear && bun run --watch docs/examples.ts",
         "build": "clear && bun --watch run scripts/build.ts",
         "publish": "clear && bun run scripts/publish.ts",
         "cmd": "cmd.exe /c start cmd /k wsl --cd ~/software/zod_utilz_bun"
