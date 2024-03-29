@@ -15,7 +15,7 @@ await zu.flatSafeParse( userSchema, { name: null, age: 42 } )
 // Error: Expected string, received null
 */
 export async function flatSafeParseAsync<Input> (
-    schema: z.Schema<Input>, input: Partial<Input>
+    schema: z.Schema<Input>, input?: Partial<Input> | null
 ): Promise<Input> {
     const result = await schema.safeParseAsync(input);
 

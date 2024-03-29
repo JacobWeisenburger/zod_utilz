@@ -19,7 +19,6 @@ test( 'should throw an field error', () => {
 } )
 
 test ( 'should throw a form error', () => {
-    // @ts-ignore
     const result = zu.flatSafeParseAsync( userSchema, null )
     expect( result ).rejects.toThrow( new Error( 'Expected object, received null' ))
 })
