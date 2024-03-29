@@ -300,6 +300,20 @@ result.error?.flatten().fieldErrors
 // { name: [ 'Expected string, received null' ] }
 ```
 
+### flatSafeParseAsync
+flatSafeParseAsync allows you to get the valid fields or throw an error
+```ts
+import { zu } from 'zod_utilz'
+const userSchema = z.object( { name: z.string(), age: z.number() } )
+const data = await zu.flatSafeParseAsync( userSchema, { name: null, age: 42 } )
+// Error: Expected string, received null
+const data = await zu.flatSafeParseAsync( userSchema, { name: 'foo', age: 42 } )
+// {
+//     name: 'foo',
+//     age: 42,
+// }
+```
+
 ### json
 zu.json() is a schema that validates that a JavaScript object is JSON-compatible. This includes `string`, `number`, `boolean`, and `null`, plus `Array`s and `Object`s containing JSON-compatible types as values
 ```ts
