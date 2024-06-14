@@ -56,3 +56,14 @@ test( 'README Example', () => {
         // Argument of type '"bar"' is not assignable to parameter of type '"foo"'
     ).toThrow()
 } )
+
+test( 'https://github.com/JacobWeisenburger/zod_utilz/issues/13', () => {
+    const DEFAULT_CONCURRENCY = 1
+    const schema = z.number().int().min( 1 ).default( DEFAULT_CONCURRENCY )
+    const typedSchema = zu.useTypedParsers( schema )
+    type Input = z.input<typeof typedSchema>
+    // type Input = number | undefined
+    type Output = z.output<typeof typedSchema>
+    // type Output = number
+    typedSchema.parse( undefined )
+} )

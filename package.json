@@ -1,6 +1,6 @@
 {
     "name": "zod_utilz",
-    "version": "0.8.2",
+    "version": "0.8.3",
     "author": "JacobWeisenburger",
     "description": "Framework agnostic utilities for Zod",
     "license": "MIT",

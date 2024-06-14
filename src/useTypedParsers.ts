@@ -25,7 +25,7 @@ type ParametersExceptFirst<Func> =
     Func extends ( arg0: any, ...rest: infer R ) => any ? R : never
 
 type Params<Schema extends z.ZodType, Method extends ParseMethods> = [
-    data: z.infer<Schema>,
+    data: z.input<Schema>,
     ...rest: ParametersExceptFirst<Schema[ Method ]>
 ]
 
