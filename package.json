@@ -14,9 +14,9 @@
     ],
     "scripts": {
         "test": "clear && bun test --watch",
+        "test.cmd": "cmd.exe /c start cmd /k bun run test",
         "build": "clear && bun --watch run scripts/build.ts",
-        "publish": "clear && bun run scripts/publish.ts",
-        "cmd": "cmd.exe /c start cmd /k wsl --cd ~/software/zod_utilz_bun"
+        "publish": "clear && bun run scripts/publish.ts"
     },
     "peerDependencies": {
         "typescript": "^5.0.0",
