@@ -8,6 +8,7 @@
     "repository": "https://github.com/JacobWeisenburger/zod_utilz",
     "homepage": "https://github.com/JacobWeisenburger/zod_utilz",
     "module": "index.js",
+    "main": "index.js",
     "type": "module",
     "keywords": [
         "typescript"
