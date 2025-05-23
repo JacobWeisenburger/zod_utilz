@@ -39,22 +39,22 @@ const useFormLike = ( type: typeof FormData | typeof URLSearchParams ) => <
  *     } )
  * )
  * 
- * zu.SPR( schema.safeParse(
+ * schema.safeParse(
  *     new URLSearchParams( {
  *         string: 'foo',
  *         number: '42',
  *         boolean: 'false',
  *     } )
- * ) ).data
+ * ).data
  * // { string: 'foo', number: 42, boolean: false }
  * 
- * zu.SPR( schema.safeParse(
+ * schema.safeParse(
  *     new URLSearchParams( {
  *         string: '42',
  *         number: 'false',
  *         boolean: 'foo',
  *     } )
- * ) ).error?.flatten().fieldErrors
+ * ).error?.flatten().fieldErrors
  * // {
  * //     string: [ 'Expected string, received number' ],
  * //     number: [ 'Expected number, received boolean' ],
@@ -88,7 +88,7 @@ formData.append( 'number', '42' )
 formData.append( 'boolean', 'false' )
 formData.append( 'file', file )
 
-zu.SPR( schema.safeParse( formData ) ).data,
+schema.safeParse( formData ).data,
 // { string: 'foo', number: 42, boolean: false, file }
 
 @example
@@ -99,7 +99,7 @@ formData.append( 'number', 'false' )
 formData.append( 'boolean', 'foo' )
 formData.append( 'file', 'filename.ext' )
 
-zu.SPR( schema.safeParse( formData ) ).error?.flatten().fieldErrors,
+schema.safeParse( formData ).error?.flatten().fieldErrors,
 // {
 //     string: [ 'Expected string, received number' ],
 //     number: [ 'Expected number, received boolean' ],

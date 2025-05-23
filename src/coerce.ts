@@ -27,7 +27,7 @@ type AllowedZodTypes =
  * const bigintSchema = zu.coerce( z.bigint() )
  * bigintSchema.parse( '42' ) // 42n
  * bigintSchema.parse( '42n' ) // 42n
- * zu.SPR( bigintSchema.safeParse( 'foo' ) ).error?.issues[ 0 ].message
+ * bigintSchema.safeParse( 'foo' ).error?.issues[ 0 ].message
  * // 'Expected bigint, received string'
  * 
  * @example
@@ -67,7 +67,7 @@ type AllowedZodTypes =
  * numberArraySchema.parse( [] ) // []
  * numberArraySchema.parse( [ '42', 42 ] ) // [ 42, 42 ]
  * 
- * zu.SPR( numberArraySchema.safeParse( 'foo' ) ).error?.issues[ 0 ].message
+ * numberArraySchema.safeParse( 'foo' ).error?.issues[ 0 ].message
  * // 'Expected number, received nan'
  */
 export function coerce<Schema extends AllowedZodTypes> ( schema: Schema ) {
