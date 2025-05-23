@@ -1,33 +1,41 @@
 import { z } from 'zod'
 
-function safeParseJSON ( string: string ): any {
-    try { return JSON.parse( string ) }
-    catch { return string }
+function safeParseJSON(string: string): any {
+	try {
+		return JSON.parse(string)
+	} catch {
+		return string
+	}
 }
 
-const formLikeToRecord = ( keys?: string[] ) =>
-    ( formLike: FormData | URLSearchParams ): Record<string, any> => {
-        return Array.from( keys ?? formLike.keys() ).reduce( ( record, key ) => {
-            const values = formLike.getAll( key )
-                .map( x => x instanceof File ? x : safeParseJSON( x ) )
-            record[ key ] = values.length > 1 ? values : values[ 0 ]
-            return record
-        }, {} as Record<string, any> )
-    }
+const formLikeToRecord =
+	(keys?: string[]) =>
+	(formLike: FormData | URLSearchParams): Record<string, any> => {
+		return Array.from(keys ?? formLike.keys()).reduce(
+			(record, key) => {
+				const values = formLike
+					.getAll(key)
+					.map((x) => (x instanceof File ? x : safeParseJSON(x)))
+				record[key] = values.length > 1 ? values : values[0]
+				return record
+			},
+			{} as Record<string, any>,
+		)
+	}
 
-const useFormLike = ( type: typeof FormData | typeof URLSearchParams ) => <
-    Schema extends z.ZodObject<z.ZodRawShape, z.UnknownKeysParam>
-> ( schema: Schema ) => {
-    const { unknownKeys } = schema._def
-    const keys = unknownKeys == 'strip' ? Object.keys( schema.shape ) : undefined
-    return z.instanceof( type )
-        .transform( formLikeToRecord( keys ) )
-        .pipe( schema )
-}
+const useFormLike =
+	(type: typeof FormData | typeof URLSearchParams) =>
+	<Schema extends z.ZodObject<z.ZodRawShape, z.UnknownKeysParam>>(
+		schema: Schema,
+	) => {
+		const { unknownKeys } = schema._def
+		const keys = unknownKeys == 'strip' ? Object.keys(schema.shape) : undefined
+		return z.instanceof(type).transform(formLikeToRecord(keys)).pipe(schema)
+	}
 
 /**
  * A way to parse URLSearchParams
- * 
+ *
  * ### Usage:
  * ```
  * import { zu } from 'zod_utilz'
@@ -38,7 +46,7 @@ const useFormLike = ( type: typeof FormData | typeof URLSearchParams ) => <
  *         boolean: z.boolean(),
  *     } )
  * )
- * 
+ *
  * schema.safeParse(
  *     new URLSearchParams( {
  *         string: 'foo',
@@ -47,7 +55,7 @@ const useFormLike = ( type: typeof FormData | typeof URLSearchParams ) => <
  *     } )
  * ).data
  * // { string: 'foo', number: 42, boolean: false }
- * 
+ *
  * schema.safeParse(
  *     new URLSearchParams( {
  *         string: '42',
@@ -62,8 +70,11 @@ const useFormLike = ( type: typeof FormData | typeof URLSearchParams ) => <
  * // }
  * ```
  */
-export const useURLSearchParams = <Schema extends z.ZodObject<z.ZodRawShape, z.UnknownKeysParam>>
-    ( schema: Schema ) => useFormLike( URLSearchParams )( schema )
+export const useURLSearchParams = <
+	Schema extends z.ZodObject<z.ZodRawShape, z.UnknownKeysParam>,
+>(
+	schema: Schema,
+) => useFormLike(URLSearchParams)(schema)
 
 /**
 A way to parse FormData
@@ -107,5 +118,8 @@ schema.safeParse( formData ).error?.flatten().fieldErrors,
 //     file: [ 'Input not instance of File' ],
 // }
 */
-export const useFormData = <Schema extends z.ZodObject<z.ZodRawShape, z.UnknownKeysParam>>
-    ( schema: Schema ) => useFormLike( FormData )( schema )
+export const useFormData = <
+	Schema extends z.ZodObject<z.ZodRawShape, z.UnknownKeysParam>,
+>(
+	schema: Schema,
+) => useFormLike(FormData)(schema)

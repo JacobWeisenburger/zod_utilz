@@ -1,0 +1,6 @@
+{
+	"biome.enabled": true,
+	// to prevent prettier from formatting the code
+	"prettier.enable": false,
+	"editor.formatOnSave": true
+}

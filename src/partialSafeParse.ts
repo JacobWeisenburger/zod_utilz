@@ -20,42 +20,47 @@ result.error?.flatten().fieldErrors
 //     name: [ 'Expected string, received null' ],
 // }
 */
-export function partialSafeParse<Schema extends z.AnyZodObject> (
-    schema: Schema, input: unknown
+export function partialSafeParse<Schema extends z.AnyZodObject>(
+	schema: Schema,
+	input: unknown,
 ): SafeParseReturnType<z.infer<Schema>, z.infer<Schema>> & {
-    successType: 'full' | 'partial' | 'none',
-    validData: Partial<z.infer<Schema>>,
-    invalidData: Partial<z.infer<Schema>>,
+	successType: 'full' | 'partial' | 'none'
+	validData: Partial<z.infer<Schema>>
+	invalidData: Partial<z.infer<Schema>>
 } {
-    const result = schema.safeParse( input )
-    if ( result.success ) return {
-        ...result,
-        successType: 'full',
-        validData: result.data as Partial<z.infer<Schema>>,
-        invalidData: {},
-    } as const
+	const result = schema.safeParse(input)
+	if (result.success)
+		return {
+			...result,
+			successType: 'full',
+			validData: result.data as Partial<z.infer<Schema>>,
+			invalidData: {},
+		} as const
 
-    const { fieldErrors, formErrors } = result.error?.flatten() ?? {}
-    if ( formErrors?.length ) return {
-        ...result,
-        successType: 'none',
-        validData: {},
-        invalidData: {},
-    }
+	const { fieldErrors, formErrors } = result.error?.flatten() ?? {}
+	if (formErrors?.length)
+		return {
+			...result,
+			successType: 'none',
+			validData: {},
+			invalidData: {},
+		}
 
-    const inputObj = input as z.infer<Schema>
-    const keysWithInvalidData = Object.keys( fieldErrors ?? {} )
-    const validInput = omit( inputObj, keysWithInvalidData )
-    const invalidData = pick( inputObj, keysWithInvalidData ) as Partial<z.infer<Schema>>
+	const inputObj = input as z.infer<Schema>
+	const keysWithInvalidData = Object.keys(fieldErrors ?? {})
+	const validInput = omit(inputObj, keysWithInvalidData)
+	const invalidData = pick(inputObj, keysWithInvalidData) as Partial<
+		z.infer<Schema>
+	>
 
-    const validData = schema
-        .omit( mapValues( () => true )( fieldErrors ) )
-        .parse( validInput ) as Partial<z.infer<Schema>>
+	const validData = schema
+		.omit(mapValues(() => true)(fieldErrors))
+		.parse(validInput) as Partial<z.infer<Schema>>
 
-    return {
-        ...result,
-        successType: 'partial',
-        validData,
-        invalidData,
-    }
+	return {
+		...result,
+		successType: 'partial',
+		validData,
+		invalidData,
+	}
 }
