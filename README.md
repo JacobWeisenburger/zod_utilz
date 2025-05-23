@@ -98,17 +98,9 @@ import { zu } from 'npm:zod_utilz'
 
 ## Utilz
 
-### SPR
-SPR stands for SafeParseResult
+### SPR - Deprecated
 
-This enables [optional chaining](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining) or [nullish coalescing](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing) for `z.SafeParseReturnType`.
-
-```ts
-import { zu } from 'zod_utilz'
-const schema = z.object( { foo: z.string() } )
-const result = zu.SPR( schema.safeParse( { foo: 42 } ) )
-const fooDataOrErrors = result.data?.foo ?? result.error?.format().foo?._errors
-```
+Starting from zod v3.23.0, you can do [optional chaining](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining) or [nullish coalescing](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing) directly from the return type of `schema.safeParse`
 
 ### makeErrorMap
 Simplifies the process of making a `ZodErrorMap`
@@ -125,18 +117,18 @@ const errorMap = zu.makeErrorMap( {
 
 const stringSchema = z.string( { errorMap } ).max( 32 )
 
-zu.SPR( stringSchema.safeParse( undefined ) ).error?.issues[ 0 ].message
+stringSchema.safeParse( undefined ).error?.issues[ 0 ].message
 // Custom required message
 
-zu.SPR( stringSchema.safeParse( 42 ) ).error?.issues[ 0 ].message
+stringSchema.safeParse( 42 ).error?.issues[ 0 ].message
 // 42 is an invalid type
 
-zu.SPR( stringSchema.safeParse( 'this string is over the maximum length' ) ).error?.issues[ 0 ].message
+stringSchema.safeParse( 'this string is over the maximum length' ).error?.issues[ 0 ].message
 // Maximum length is 32
 
 const enumSchema = z.enum( [ 'foo', 'bar' ], { errorMap } )
 
-zu.SPR( enumSchema.safeParse( 'baz' ) ).error?.issues[ 0 ].message
+enumSchema.safeParse( 'baz' ).error?.issues[ 0 ].message
 // baz is not a valid enum value. Valid options: foo | bar
 ```
 
@@ -163,7 +155,7 @@ import { zu } from 'zod_utilz'
 const bigintSchema = zu.coerce( z.bigint() )
 bigintSchema.parse( '42' ) // 42n
 bigintSchema.parse( '42n' ) // 42n
-zu.SPR( bigintSchema.safeParse( 'foo' ) ).error?.issues[ 0 ].message
+bigintSchema.safeParse( 'foo' ).error?.issues[ 0 ].message
 // 'Expected bigint, received string'
 ```
 
@@ -207,7 +199,7 @@ numberArraySchema.parse( '42' ) // [ 42 ]
 numberArraySchema.parse( [] ) // []
 numberArraySchema.parse( [ '42', 42 ] ) // [ 42, 42 ]
 
-zu.SPR( numberArraySchema.safeParse( 'foo' ) ).error?.issues[ 0 ].message
+numberArraySchema.safeParse( 'foo' ).error?.issues[ 0 ].message
 // 'Expected number, received nan'
 ```
 
@@ -223,22 +215,22 @@ const schema = zu.useURLSearchParams(
     } )
 )
 
-zu.SPR( schema.safeParse(
+schema.safeParse(
     new URLSearchParams( {
         string: 'foo',
         number: '42',
         boolean: 'false',
     } )
-) ).data
+).data
 // { string: 'foo', number: 42, boolean: false }
 
-zu.SPR( schema.safeParse(
+schema.safeParse(
     new URLSearchParams( {
         string: '42',
         number: 'false',
         boolean: 'foo',
     } )
-) ).error?.flatten().fieldErrors
+).error?.flatten().fieldErrors
 // {
 //     string: [ 'Expected string, received number' ],
 //     number: [ 'Expected number, received boolean' ],
@@ -266,7 +258,7 @@ formData.append( 'number', '42' )
 formData.append( 'boolean', 'false' )
 formData.append( 'file', new File( [], 'filename.ext' ) )
 
-zu.SPR( schema.safeParse( formData ) ).data,
+schema.safeParse( formData ).data,
 // { string: 'foo', number: 42, boolean: false, file: File }
 ```
 ```ts
@@ -276,7 +268,7 @@ formData.append( 'number', 'false' )
 formData.append( 'boolean', 'foo' )
 formData.append( 'file', 'filename.ext' )
 
-zu.SPR( schema.safeParse( formData ) ).error?.flatten().fieldErrors,
+schema.safeParse( formData ).error?.flatten().fieldErrors,
 // {
 //     string: [ 'Expected string, received number' ],
 //     number: [ 'Expected number, received boolean' ],
