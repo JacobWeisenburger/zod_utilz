@@ -1,5 +1,4 @@
-import { z } from 'zod'
-import { zu } from '.'
+import { SafeParseReturnType, z } from 'zod'
 import { mapValues } from './lib/mapValues'
 import { pick } from './lib/pick'
 import { omit } from './lib/omit'
@@ -23,12 +22,12 @@ result.error?.flatten().fieldErrors
 */
 export function partialSafeParse<Schema extends z.AnyZodObject> (
     schema: Schema, input: unknown
-): ReturnType<typeof zu.SPR> & {
+): SafeParseReturnType<z.infer<Schema>, z.infer<Schema>> & {
     successType: 'full' | 'partial' | 'none',
     validData: Partial<z.infer<Schema>>,
     invalidData: Partial<z.infer<Schema>>,
 } {
-    const result = zu.SPR( schema.safeParse( input ) )
+    const result = schema.safeParse( input )
     if ( result.success ) return {
         ...result,
         successType: 'full',

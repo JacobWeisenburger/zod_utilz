@@ -51,7 +51,7 @@ test( 'useURLSearchParams happy path', () => {
     searchParams.append( 'manyNumbers', '123' )
     searchParams.append( 'manyNumbers', '456' )
 
-    const result = zu.SPR( searchParamsSchema.safeParse( searchParams ) )
+    const result = searchParamsSchema.safeParse( searchParams )
 
     expect( result.data ).toMatchObject( {
         manyStrings: [ 'hello', 'world' ],
@@ -94,7 +94,7 @@ test( 'useURLSearchParams sad path', () => {
 
     searchParams.append( 'oneStringInArray', 'Jenkiiiiiins!' )
 
-    const result = zu.SPR( searchParamsSchema.safeParse( searchParams ) )
+    const result = searchParamsSchema.safeParse( searchParams )
 
     expect( result.error?.flatten() ).toMatchObject(
         {
@@ -127,14 +127,14 @@ test( 'passthrough', () => {
     const schema = zu.useURLSearchParams( objSchema )
 
     expect(
-        zu.SPR( schema.safeParse(
+        schema.safeParse(
             new URLSearchParams( {
                 string: 'foo',
                 number: '42',
                 boolean: 'false',
                 extraKey: 'extraValue',
             } )
-        ) ).data
+        ).data
     ).toMatchObject(
         {
             string: 'foo',
@@ -149,11 +149,11 @@ test( 'strict', () => {
     const objSchema = z.object( {} ).strict()
     const schema = zu.useURLSearchParams( objSchema )
     expect(
-        zu.SPR( schema.safeParse(
+        schema.safeParse(
             new URLSearchParams( {
                 extraKey: 'extraValue',
             } )
-        ) ).error?.flatten().formErrors
+        ).error?.flatten().formErrors
     ).toMatchObject(
         [ "Unrecognized key(s) in object: 'extraKey'" ]
     )
@@ -170,25 +170,25 @@ test( 'README Example', () => {
     )
 
     expect(
-        zu.SPR( schema.safeParse(
+        schema.safeParse(
             new URLSearchParams( {
                 string: 'foo',
                 number: '42',
                 boolean: 'false',
             } )
-        ) ).data
+        ).data
     ).toMatchObject(
         { string: 'foo', number: 42, boolean: false }
     )
 
     expect(
-        zu.SPR( schema.safeParse(
+        schema.safeParse(
             new URLSearchParams( {
                 string: '42',
                 number: 'false',
                 boolean: 'foo',
             } )
-        ) ).error?.flatten().fieldErrors
+        ).error?.flatten().fieldErrors
     ).toMatchObject(
         {
             string: [ 'Expected string, received number' ],
@@ -217,7 +217,7 @@ test( 'README Example', () => {
         formData.append( 'file', file )
 
         expect(
-            zu.SPR( schema.safeParse( formData ) ).data
+            schema.safeParse( formData ).data
         ).toMatchObject(
             { string: 'foo', number: 42, boolean: false, file }
         )
@@ -231,7 +231,7 @@ test( 'README Example', () => {
         formData.append( 'file', 'filename.ext' )
 
         expect(
-            zu.SPR( schema.safeParse( formData ) ).error?.flatten().fieldErrors
+            schema.safeParse( formData ).error?.flatten().fieldErrors
         ).toMatchObject(
             {
                 string: [ 'Expected string, received number' ],

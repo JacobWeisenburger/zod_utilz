@@ -1,4 +1,3 @@
-export * from './SPR'
 export * from './makeErrorMap'
 export * from './useTypedParsers'
 export * from './coerce'

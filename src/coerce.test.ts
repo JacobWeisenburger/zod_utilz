@@ -261,7 +261,7 @@ test( 'README Example: z.bigint()', () => {
     const bigintSchema = zu.coerce( z.bigint() )
     expect( bigintSchema.parse( '42' ) ).toBe( 42n )
     expect( bigintSchema.parse( '42n' ) ).toBe( 42n )
-    expect( zu.SPR( bigintSchema.safeParse( 'foo' ) ).error?.issues[ 0 ].message )
+    expect( bigintSchema.safeParse( 'foo' ).error?.issues[ 0 ].message )
         .toBe( 'Expected bigint, received string' )
 } )
 
@@ -301,7 +301,7 @@ test( 'README Example: z.number().array()', () => {
     expect( numberArraySchema.parse( [] ) ).toMatchObject( [] )
     expect( numberArraySchema.parse( [ '42', 42 ] ) ).toMatchObject( [ 42, 42 ] )
 
-    expect( zu.SPR( numberArraySchema.safeParse( 'foo' ) ).error?.issues[ 0 ].message )
+    expect( numberArraySchema.safeParse( 'foo' ).error?.issues[ 0 ].message )
         .toBe( 'Expected number, received nan' )
 } )
 

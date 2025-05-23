@@ -28,9 +28,9 @@ const errorCtxMock = {
 test( 'z.string( { errorMap } )', () => {
     const schema = z.string( { errorMap } ).min( 3 ).max( 5 )
 
-    expect( zu.SPR( schema.safeParse( 'foo' ) ).data ).toBe( 'foo' )
+    expect( schema.safeParse( 'foo' ).data ).toBe( 'foo' )
 
-    expect( zu.SPR( schema.safeParse( undefined ) ).error?.issues[ 0 ].message )
+    expect( schema.safeParse( undefined ).error?.issues[ 0 ].message )
         .toBe(
             config.required( {
                 ...errorCtxMock,
@@ -39,13 +39,13 @@ test( 'z.string( { errorMap } )', () => {
             } )
         )
 
-    expect( zu.SPR( schema.safeParse( 42 ) ).error?.issues[ 0 ].message )
+    expect( schema.safeParse( 42 ).error?.issues[ 0 ].message )
         .toBe( config.invalid_type( errorCtxMock ) )
 
-    expect( zu.SPR( schema.safeParse( [ 'foo' ] ) ).error?.issues[ 0 ].message )
+    expect( schema.safeParse( [ 'foo' ] ).error?.issues[ 0 ].message )
         .toBe( config.invalid_type( errorCtxMock ) )
 
-    expect( zu.SPR( schema.safeParse( 'ha' ) ).error?.issues[ 0 ].message )
+    expect( schema.safeParse( 'ha' ).error?.issues[ 0 ].message )
         .toBe(
             config.too_small( {
                 ...errorCtxMock,
@@ -56,7 +56,7 @@ test( 'z.string( { errorMap } )', () => {
             } )
         )
 
-    expect( zu.SPR( schema.safeParse( 'hello world' ) ).error?.issues[ 0 ].message )
+    expect( schema.safeParse( 'hello world' ).error?.issues[ 0 ].message )
         .toBe(
             config.too_big( {
                 ...errorCtxMock,
@@ -71,9 +71,9 @@ test( 'z.string( { errorMap } )', () => {
 test( 'z.number( { errorMap } )', () => {
     const schema = z.number( { errorMap } ).min( 3 ).max( 5 )
 
-    expect( zu.SPR( schema.safeParse( 3 ) ).data ).toBe( 3 )
+    expect( schema.safeParse( 3 ).data ).toBe( 3 )
 
-    expect( zu.SPR( schema.safeParse( undefined ) ).error?.issues[ 0 ].message )
+    expect( schema.safeParse( undefined ).error?.issues[ 0 ].message )
         .toBe(
             config.required( {
                 ...errorCtxMock,
@@ -82,13 +82,13 @@ test( 'z.number( { errorMap } )', () => {
             } )
         )
 
-    expect( zu.SPR( schema.safeParse( 'foo' ) ).error?.issues[ 0 ].message )
+    expect( schema.safeParse( 'foo' ).error?.issues[ 0 ].message )
         .toBe( config.invalid_type( errorCtxMock ) )
 
-    expect( zu.SPR( schema.safeParse( [ 42 ] ) ).error?.issues[ 0 ].message )
+    expect( schema.safeParse( [ 42 ] ).error?.issues[ 0 ].message )
         .toBe( config.invalid_type( errorCtxMock ) )
 
-    expect( zu.SPR( schema.safeParse( 2 ) ).error?.issues[ 0 ].message )
+    expect( schema.safeParse( 2 ).error?.issues[ 0 ].message )
         .toBe(
             config.too_small( {
                 ...errorCtxMock,
@@ -99,7 +99,7 @@ test( 'z.number( { errorMap } )', () => {
             } )
         )
 
-    expect( zu.SPR( schema.safeParse( 6 ) ).error?.issues[ 0 ].message )
+    expect( schema.safeParse( 6 ).error?.issues[ 0 ].message )
         .toBe(
             config.too_big( {
                 ...errorCtxMock,
@@ -114,9 +114,9 @@ test( 'z.number( { errorMap } )', () => {
 test( `z.enum( [ 'foo', 'bar', 'baz' ], { errorMap } )`, () => {
     const schema = z.enum( [ 'foo', 'bar', 'baz' ], { errorMap } )
 
-    expect( zu.SPR( schema.safeParse( 'foo' ) ).data ).toBe( 'foo' )
+    expect( schema.safeParse( 'foo' ).data ).toBe( 'foo' )
 
-    expect( zu.SPR( schema.safeParse( undefined ) ).error?.issues[ 0 ].message )
+    expect( schema.safeParse( undefined ).error?.issues[ 0 ].message )
         .toBe(
             config.required( {
                 ...errorCtxMock,
@@ -125,10 +125,10 @@ test( `z.enum( [ 'foo', 'bar', 'baz' ], { errorMap } )`, () => {
             } )
         )
 
-    expect( zu.SPR( schema.safeParse( 42 ) ).error?.issues[ 0 ].message )
+    expect( schema.safeParse( 42 ).error?.issues[ 0 ].message )
         .toBe( config.invalid_type( errorCtxMock ) )
 
-    expect( zu.SPR( schema.safeParse( [ 'foo' ] ) ).error?.issues[ 0 ].message )
+    expect( schema.safeParse( [ 'foo' ] ).error?.issues[ 0 ].message )
         .toBe( config.invalid_type( errorCtxMock ) )
 } )
 
@@ -136,9 +136,9 @@ test( 'z.date( { errorMap } )', () => {
     const schema = z.date( { errorMap } )
 
     const now = new Date
-    expect( zu.SPR( schema.safeParse( now ) ).data ).toMatchObject( now )
+    expect( schema.safeParse( now ).data ).toMatchObject( now )
 
-    expect( zu.SPR( schema.safeParse( undefined ) ).error?.issues[ 0 ].message )
+    expect( schema.safeParse( undefined ).error?.issues[ 0 ].message )
         .toBe(
             config.required( {
                 ...errorCtxMock,
@@ -147,10 +147,10 @@ test( 'z.date( { errorMap } )', () => {
             } )
         )
 
-    expect( zu.SPR( schema.safeParse( '2023-01-13' ) ).error?.issues[ 0 ].message )
+    expect( schema.safeParse( '2023-01-13' ).error?.issues[ 0 ].message )
         .toBe( config.invalid_type( errorCtxMock ) )
 
-    expect( zu.SPR( schema.safeParse( null ) ).error?.issues[ 0 ].message )
+    expect( schema.safeParse( null ).error?.issues[ 0 ].message )
         .toBe( config.invalid_type( errorCtxMock ) )
 } )
 
@@ -168,10 +168,10 @@ test( 'README Example', () => {
     const maximum = 32
     const stringSchema = z.string( { errorMap } ).max( maximum )
 
-    expect( zu.SPR( stringSchema.safeParse( undefined ) ).error?.issues[ 0 ].message )
+    expect( stringSchema.safeParse( undefined ).error?.issues[ 0 ].message )
         .toBe( config.required )
 
-    expect( zu.SPR( stringSchema.safeParse( 42 ) ).error?.issues[ 0 ].message )
+    expect( stringSchema.safeParse( 42 ).error?.issues[ 0 ].message )
         .toBe(
             config.invalid_type( {
                 ...errorCtxMock,
@@ -180,9 +180,7 @@ test( 'README Example', () => {
         )
 
     expect(
-        zu.SPR(
-            stringSchema.safeParse( 'this string is over the maximum length' )
-        ).error?.issues[ 0 ].message
+        stringSchema.safeParse( 'this string is over the maximum length' ).error?.issues[ 0 ].message
     ).toBe(
         config.too_big( {
             ...errorCtxMock,
@@ -195,7 +193,7 @@ test( 'README Example', () => {
 
     const enumSchema = z.enum( [ 'foo', 'bar' ], { errorMap } )
 
-    expect( zu.SPR( enumSchema.safeParse( 'baz' ) ).error?.issues[ 0 ].message )
+    expect( enumSchema.safeParse( 'baz' ).error?.issues[ 0 ].message )
         .toBe(
             config.invalid_enum_value( {
                 ...errorCtxMock,
